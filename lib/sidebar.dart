@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'block.dart';
+import 'dart:io';
 class sidebar extends StatelessWidget {
   void _showDialog(BuildContext context) {
     showDialog(
@@ -66,7 +67,9 @@ class sidebar extends StatelessWidget {
           ),
           Divider(),
           InkWell(
-            onTap: () {},
+            onTap: () {
+
+            },
             child: Container(
               height: 50,
               child: Row(
@@ -86,7 +89,7 @@ class sidebar extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [Icon(Icons.onetwothree_rounded,color: Colors.blueAccent,), Text("显示数字")],
+                children: [Icon(Icons.navigate_next,color: Colors.blueAccent,), Text("下一步")],
               ),
             ),
           ),

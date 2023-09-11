@@ -3,17 +3,13 @@ import 'package:flutter/material.dart';
 class block extends StatefulWidget {
   final int x;
   final int y;
-  final double block_width;
-  final double block_height;
-  final int is_block;
+  final int block_state;
 
   const block(
       {super.key,
       required this.x,
       required this.y,
-      required this.block_height,
-      required this.block_width,
-      required this.is_block});
+      required this.block_state});
 
   @override
   _BlockState createState() => _BlockState();
@@ -21,18 +17,25 @@ class block extends StatefulWidget {
 
 class _BlockState extends State<block> {
   late int have_visit;
-  late bool been_choose;
+  late bool been_visit;
+  Color getBlockColor(){
+    if(widget.block_state==1) return Colors.black;
+    if(!been_visit){
+      return Colors.transparent;
+    }
+    return Colors.black45;
+  }
   @override
   void initState(){
     super.initState();
-    been_choose=false;
+    been_visit=false;
   }
   @override
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
           setState(() {
-            been_choose=!been_choose;
+            been_visit=!been_visit;
           });
           // been_choose=been_choose;
         },
@@ -40,7 +43,7 @@ class _BlockState extends State<block> {
           duration: Duration(seconds: 3),
           // height: widget.block_height,
           // width: widget.block_width,
-          color: been_choose?Colors.grey:Colors.white70,
+          color: getBlockColor(),
           child: Center(
             child: Text("0"),
           ),
