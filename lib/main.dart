@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         body: Row(
           children: [
             Spacer(),
-            canvas(n: 10, m: 10),
+            canvas(n: 1, m: 1,maze: [],block_states: [],),
             Spacer(),
             VerticalDivider(),
             sidebar()

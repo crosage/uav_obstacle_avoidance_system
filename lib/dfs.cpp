@@ -11,21 +11,22 @@ int maze[MAX_N][MAX_M];
 int visited[MAX_N][MAX_M];
 int dx[] = {-1, 1, 0, 0};
 int dy[] = {0, 0, -1, 1};
+int tot=0;
 int n, m;
 bool isValid(int x, int y) {
     return x >= 0 && x < n && y >= 0 && y < m && maze[x][y] == 0 && !visited[x][y];
 }
-bool dfs(int x, int y,int depth) {
+bool dfs(int x, int y) {
     printf("x=%d y=%d\n",x,y);
     if (x == n - 1 && y == m - 1) {
         return true;
     }
-    visited[x][y] = depth;
+    visited[x][y] = ++tot;
     for (int i = 0; i < 4; ++i) {
         int newX = x + dx[i];
         int newY = y + dy[i];
         if (isValid(newX, newY)) {
-            if (dfs(newX, newY,depth+1)) {
+            if (dfs(newX, newY)) {
                 return true;
             }
         }
@@ -50,7 +51,7 @@ int main() {
             }
         }
     }
-    dfs(0,0,1);
+    dfs(0,0);
     json maze_result,result;
     for (int i = 0; i < n; ++i) {
         json rowArray;

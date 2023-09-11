@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'block.dart';
 import 'dart:io';
+
 class sidebar extends StatelessWidget {
   void _showDialog(BuildContext context) {
     showDialog(
@@ -33,9 +34,7 @@ class sidebar extends StatelessWidget {
                   ),
                   Text(
                     "操作与选项",
-                    style: TextStyle(
-                      fontSize: 20
-                    ),
+                    style: TextStyle(fontSize: 20),
                   )
                 ],
               ),
@@ -49,7 +48,13 @@ class sidebar extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [Icon(Icons.file_upload_outlined,color: Colors.blueAccent,), Text("从文件中导入数据")],
+                children: [
+                  Icon(
+                    Icons.file_upload_outlined,
+                    color: Colors.blueAccent,
+                  ),
+                  Text("从文件中导入数据")
+                ],
               ),
             ),
           ),
@@ -61,35 +66,49 @@ class sidebar extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [Icon(Icons.refresh,color: Colors.blueAccent,), Text("重新运行一遍")],
+                children: [
+                  Icon(
+                    Icons.refresh,
+                    color: Colors.blueAccent,
+                  ),
+                  Text("重新运行一遍")
+                ],
               ),
             ),
           ),
           Divider(),
           InkWell(
-            onTap: () {
-
-            },
+            onTap: () {},
             child: Container(
               height: 50,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [Icon(Icons.touch_app,color: Colors.blueAccent,), Text("手动创建一张表")],
+                children: [
+                  Icon(
+                    Icons.touch_app,
+                    color: Colors.blueAccent,
+                  ),
+                  Text("手动创建一张表")
+                ],
               ),
             ),
           ),
           Divider(),
           InkWell(
-            onTap: () {
-
-            },
+            onTap: () {},
             child: Container(
               height: 50,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [Icon(Icons.navigate_next,color: Colors.blueAccent,), Text("下一步")],
+                children: [
+                  Icon(
+                    Icons.navigate_next,
+                    color: Colors.blueAccent,
+                  ),
+                  Text("下一步")
+                ],
               ),
             ),
           ),
