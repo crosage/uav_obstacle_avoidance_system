@@ -22,7 +22,7 @@ class _MyAppState extends State<MyApp> {
       blockState=dfs_data;
     });
   }
-  void _dealNextStep(int x){
+  void _dealNextStep(){
     setState(() {
       step=step+1;
     });

@@ -4,13 +4,19 @@ import 'block.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
-class Sidebar extends StatelessWidget {
+class Sidebar extends StatefulWidget{
   final Function(int,int,List<List<int>>,List<List<int>>) onCanvasChange;
-  final Function(int) nextStep;
+  final Function() nextStep;
+  Sidebar(this.onCanvasChange,this.nextStep);
+  @override
+  _SidebarState createState() => _SidebarState();
+}
+class _SidebarState extends State<Sidebar> {
+
   List<int> a=[];
   List<List<int>> maze=[];
-  List<List<int>> dfs_state=[];
-  Sidebar(this.onCanvasChange,this.nextStep);
+  List<List<int>> dfsState=[];
+  int n=1,m=1;
   Future<String> runSystemCommand(String command,List<dynamic> arguments) async{
     print(command);
     final process=await Process.run(command, []);
@@ -22,22 +28,16 @@ class Sidebar extends StatelessWidget {
     return output;
   }
   Future<void> _runDfs() async{
-    print("*****************maze=");
-    print(maze);
-    print(dfs_state);
     final path=Directory.current.path+"\\"+"maze.exe";
-    print(path);
     await Process.run(path,[]);
     final result=await runSystemCommand(path,[]);
-    print(result);
     final resultPath=Directory.current.path+"\\"+"result.json";
     try{
       final file=File(resultPath!);
       if(await file.exists()){
         String content=await file.readAsString();
-        print("**********");
         Map<String,dynamic> jsonData=json.decode(content);
-        dfs_state.clear();
+        dfsState.clear();
         final mazeState=jsonData["maze"];
         for (final row in mazeState) {
           if (row is List<dynamic>) {
@@ -47,13 +47,10 @@ class Sidebar extends StatelessWidget {
                 intRow.add(element);
               }
             }
-            dfs_state.add(intRow);
+            dfsState.add(intRow);
           }
         }
-        print("#####################");
-        print(maze);
-        print(dfs_state);
-        onCanvasChange(jsonData["n"],jsonData["m"],maze,dfs_state);
+        widget.onCanvasChange(n,m,maze,dfsState);
       }
     }catch (e){
       print(e);
@@ -62,9 +59,6 @@ class Sidebar extends StatelessWidget {
 
   }
   Future<void> _readMaze() async{
-    print(maze);
-    a.add(123);
-    print(a);
     try{
       final result=await FilePicker.platform.pickFiles(
         type: FileType.custom,
@@ -80,7 +74,7 @@ class Sidebar extends StatelessWidget {
             Map<String,dynamic> jsonData=json.decode(content);
             print("n="+jsonData["n"].toString()+" m="+jsonData["m"].toString());
             maze.clear();
-            dfs_state.clear();
+            dfsState.clear();
             final mazeData=jsonData["maze"];
             for (final row in mazeData) {
               if (row is List<dynamic>) {
@@ -93,13 +87,12 @@ class Sidebar extends StatelessWidget {
                   }
                 }
                 maze.add(intRow);
-                dfs_state.add(pre_state);
+                dfsState.add(pre_state);
               }
             }
-            print("(((((((((((((((((((((((((((");
-            print(maze);
-            print(")))))))))))))))))))))))))))");
-            onCanvasChange(jsonData["n"],jsonData["m"],maze,dfs_state);
+            n=jsonData["n"];
+            m=jsonData["m"];
+            widget.onCanvasChange(n,m,maze,dfsState);
           }
         }catch (e){
           print(e);
@@ -108,6 +101,9 @@ class Sidebar extends StatelessWidget {
     }catch (e){
       print(e);
     }
+    print(")))))))))))");
+    print(maze);
+    print("(((((((((((");
     // final file=File("./maze.json");
 
   }
@@ -211,7 +207,9 @@ class Sidebar extends StatelessWidget {
           ),
           Divider(),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              widget.nextStep();
+            },
             child: Container(
               height: 50,
               child: Row(

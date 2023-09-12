@@ -39,7 +39,7 @@ int main() {
     char buffer[MAX_PATH];
     GetModuleFileName(NULL, buffer, MAX_PATH);
     cerr<<buffer<<"**************"<<endl;
-    ifstream file("./lib/maze.json");
+    ifstream file("./maze.json");
     if (!file.is_open()) {
         cerr << "is_not_json" << endl;
         return 1;
