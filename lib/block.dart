@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
 
-class block extends StatefulWidget {
+class Block extends StatefulWidget {
   final int x;
   final int y;
-  final int block_state;
+  final int blockState;
   // 1已经遍历 0没有遍历 -1为团块
-  const block(
-      {super.key, required this.x, required this.y, required this.block_state});
+  const Block(
+      {super.key, required this.x, required this.y, required this.blockState});
 
   @override
   _BlockState createState() => _BlockState();
 }
 
-class _BlockState extends State<block> {
+class _BlockState extends State<Block> {
   late int have_visit;
-  late int been_visit;
+  late int beenVisit;
 
   Color getBlockColor() {
-    if (widget.block_state == 1) return Colors.yellow[200]!;
-    else if(widget.block_state==0) return Colors.yellow[50]!;
+    if (widget.blockState == 1) return Colors.yellow[200]!;
+    else if(widget.blockState==0) return Colors.yellow[50]!;
     else return Colors.yellow[400]!;
   }
 
   @override
   void initState() {
     super.initState();
-    been_visit = 0;
+    beenVisit = 0;
   }
 
   @override
@@ -33,7 +33,7 @@ class _BlockState extends State<block> {
     return InkWell(
         onTap: () {
           setState(() {
-            been_visit = 1-been_visit;
+            beenVisit = 1-beenVisit;
           });
           // been_choose=been_choose;
         },

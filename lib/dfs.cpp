@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <windows.h>
 #include "./nlohmann/json.hpp"
 using json=nlohmann::json;
 using namespace std;
@@ -35,7 +36,10 @@ bool dfs(int x, int y) {
 }
 
 int main() {
-    ifstream file("maze.json");
+    char buffer[MAX_PATH];
+    GetModuleFileName(NULL, buffer, MAX_PATH);
+    cerr<<buffer<<"**************"<<endl;
+    ifstream file("./lib/maze.json");
     if (!file.is_open()) {
         cerr << "is_not_json" << endl;
         return 1;
@@ -66,7 +70,7 @@ int main() {
         maze_result.push_back(rowArray);
     }
     result["maze"]=maze_result;
-    ofstream result_file("result.json");
+    ofstream result_file("./lib/result.json");
     if(result_file.is_open()){
         result_file<<result.dump(4);
         result_file.close();

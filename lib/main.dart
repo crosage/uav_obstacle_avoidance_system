@@ -13,13 +13,13 @@ class MyApp extends StatefulWidget{
 class _MyAppState extends State<MyApp> {
   int row=1,col=1;
   List<List<int>> maze=[[0]];
-  List<List<int>> block_state=[[0]];
+  List<List<int>> blockState=[[0]];
   void _handle_n_m(int x,int y,List<List<int>> maze_data,List<List<int>> dfs_data){
     setState(() {
       row=x;
       col=y;
       maze=maze_data;
-      block_state=dfs_data;
+      blockState=dfs_data;
     });
   }
   @override
@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        primaryColor: Color(0xFF5bc2e7),
         useMaterial3: true,
       ),
       home: Scaffold(
@@ -38,10 +38,10 @@ class _MyAppState extends State<MyApp> {
         body: Row(
           children: [
             Spacer(),
-            canvas(n: row, m: col,maze: maze,block_states: block_state,),
+            Canvas(n: row, m: col,maze: maze,blockStates: blockState,depth: 0,),
             Spacer(),
             VerticalDivider(),
-            sidebar(_handle_n_m)
+            Sidebar(_handle_n_m)
           ],
         ),
       ),

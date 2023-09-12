@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:spfa/block.dart';
 
-class canvas extends StatefulWidget {
+class Canvas extends StatefulWidget {
   final int n;
   final int m;
   final List<List<int>> maze;
-  final List<List<int>> block_states;
+  final List<List<int>> blockStates;
+  final int depth;
 
-  canvas(
-      {required this.n,
-      required this.m,
-      required this.maze,
-      required this.block_states});
+  Canvas({
+    required this.n,
+    required this.m,
+    required this.maze,
+    required this.blockStates,
+    required this.depth,
+  });
 
   @override
   _CanvasState createState() => _CanvasState();
 }
 
 // 状态：当前搜索深度，需要传入搜索后的深度状态图，传入图的n，m，传入图的原始状态
-class _CanvasState extends State<canvas> {
-  int depth = 0;
-
+class _CanvasState extends State<Canvas> {
   int get_block_state(int x, int y) {
     if (widget.maze[x][y] == 0) {
-      if (depth > widget.block_states[x][y]) {
+      if (widget.depth > widget.blockStates[x][y]) {
         return 1;
       }
       return 0;
@@ -44,7 +45,7 @@ class _CanvasState extends State<canvas> {
         itemBuilder: (BuildContext context, int index) {
           final int row = index ~/ widget.m;
           final int col = index % widget.m;
-          return block(x: row, y: col, block_state: get_block_state(row, col));
+          return Block(x: row, y: col, blockState: get_block_state(row, col));
         },
         shrinkWrap: true,
       ),

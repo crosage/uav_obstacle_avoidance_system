@@ -1,12 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:spfa/create_maze.dart';
 import 'block.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
-class sidebar extends StatelessWidget {
+class Sidebar extends StatelessWidget {
   final Function(int,int,List<List<int>>,List<List<int>>) onCanvasChange;
+  List<List<int>> maze=[];
+  List<List<int>> dfs_state=[];
+  Sidebar(this.onCanvasChange);
+  Future<String> runSystemCommand(String command,List<dynamic> arguments) async{
+    print(command);
+    final process=await Process.run(command, []);
+    print(process);
+    final output = await process.stdout;
+    final error= await process.stderr;
+    print(output);
+    print(error);
+    return output;
+  }
+  Future<void> _runDfs() async{
+    final path=Directory.current.path+"\\lib\\"+"maze.exe";
+    print(path);
+    await Process.run(path,[]);
+    final result=await runSystemCommand(path,[]);
+    print(result);
+    // final result=await runSystemCommand("./maze.exe");
 
-  sidebar(this.onCanvasChange);
+  }
   Future<void> _readMaze() async{
 
     try{
@@ -23,8 +44,8 @@ class sidebar extends StatelessWidget {
             print("**********");
             Map<String,dynamic> jsonData=json.decode(content);
             print("n="+jsonData["n"].toString()+" m="+jsonData["m"].toString());
-            final List<List<int>> maze=[];
-            final List<List<int>> dfs_state=[];
+            maze.clear();
+            dfs_state.clear();
             final mazeData=jsonData["maze"];
             for (final row in mazeData) {
               if (row is List<dynamic>) {
@@ -41,7 +62,6 @@ class sidebar extends StatelessWidget {
               }
             }
             print(maze);
-
             onCanvasChange(jsonData["n"],jsonData["m"],maze,dfs_state);
           }
         }catch (e){
@@ -55,12 +75,13 @@ class sidebar extends StatelessWidget {
 
   }
   void _createMaze(BuildContext context) {
+    int n=0;
+    int m=0;
+    List<List<int>> maze = [];
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-                title: Text("创建一张表")
-              );
+          return CreateMazeDialog();
         });
   }
 
@@ -113,7 +134,9 @@ class sidebar extends StatelessWidget {
           ),
           Divider(),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              _runDfs();
+            },
             child: Container(
               height: 50,
               child: Row(
