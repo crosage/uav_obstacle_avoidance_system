@@ -4,7 +4,7 @@ class block extends StatefulWidget {
   final int x;
   final int y;
   final int block_state;
-
+  // 1已经遍历 0没有遍历 -1为团块
   const block(
       {super.key, required this.x, required this.y, required this.block_state});
 
@@ -14,20 +14,18 @@ class block extends StatefulWidget {
 
 class _BlockState extends State<block> {
   late int have_visit;
-  late bool been_visit;
+  late int been_visit;
 
   Color getBlockColor() {
-    if (widget.block_state == 1) return Colors.black;
-    if (!been_visit) {
-      return Colors.transparent;
-    }
-    return Colors.black45;
+    if (widget.block_state == 1) return Colors.yellow[200]!;
+    else if(widget.block_state==0) return Colors.yellow[50]!;
+    else return Colors.yellow[400]!;
   }
 
   @override
   void initState() {
     super.initState();
-    been_visit = false;
+    been_visit = 0;
   }
 
   @override
@@ -35,7 +33,7 @@ class _BlockState extends State<block> {
     return InkWell(
         onTap: () {
           setState(() {
-            been_visit = !been_visit;
+            been_visit = 1-been_visit;
           });
           // been_choose=been_choose;
         },

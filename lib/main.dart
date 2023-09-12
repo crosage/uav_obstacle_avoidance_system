@@ -3,11 +3,25 @@ import 'package:spfa/canvas.dart';
 import 'sidebar.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
+class MyApp extends StatefulWidget{
+  @override
+  _MyAppState createState()=> _MyAppState();
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+}
+class _MyAppState extends State<MyApp> {
+  int row=1,col=1;
+  List<List<int>> maze=[[0]];
+  List<List<int>> block_state=[[0]];
+  void _handle_n_m(int x,int y,List<List<int>> maze_data,List<List<int>> dfs_data){
+    setState(() {
+      row=x;
+      col=y;
+      maze=maze_data;
+      block_state=dfs_data;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,10 +38,10 @@ class MyApp extends StatelessWidget {
         body: Row(
           children: [
             Spacer(),
-            canvas(n: 1, m: 1,maze: [],block_states: [],),
+            canvas(n: row, m: col,maze: maze,block_states: block_state,),
             Spacer(),
             VerticalDivider(),
-            sidebar()
+            sidebar(_handle_n_m)
           ],
         ),
       ),
