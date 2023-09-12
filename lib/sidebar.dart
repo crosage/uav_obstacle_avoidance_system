@@ -6,9 +6,11 @@ import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 class Sidebar extends StatelessWidget {
   final Function(int,int,List<List<int>>,List<List<int>>) onCanvasChange;
+  final Function(int) nextStep;
+  List<int> a=[];
   List<List<int>> maze=[];
   List<List<int>> dfs_state=[];
-  Sidebar(this.onCanvasChange);
+  Sidebar(this.onCanvasChange,this.nextStep);
   Future<String> runSystemCommand(String command,List<dynamic> arguments) async{
     print(command);
     final process=await Process.run(command, []);
@@ -20,16 +22,49 @@ class Sidebar extends StatelessWidget {
     return output;
   }
   Future<void> _runDfs() async{
-    final path=Directory.current.path+"\\lib\\"+"maze.exe";
+    print("*****************maze=");
+    print(maze);
+    print(dfs_state);
+    final path=Directory.current.path+"\\"+"maze.exe";
     print(path);
     await Process.run(path,[]);
     final result=await runSystemCommand(path,[]);
     print(result);
+    final resultPath=Directory.current.path+"\\"+"result.json";
+    try{
+      final file=File(resultPath!);
+      if(await file.exists()){
+        String content=await file.readAsString();
+        print("**********");
+        Map<String,dynamic> jsonData=json.decode(content);
+        dfs_state.clear();
+        final mazeState=jsonData["maze"];
+        for (final row in mazeState) {
+          if (row is List<dynamic>) {
+            final List<int> intRow = [];
+            for (final element in row) {
+              if (element is int) {
+                intRow.add(element);
+              }
+            }
+            dfs_state.add(intRow);
+          }
+        }
+        print("#####################");
+        print(maze);
+        print(dfs_state);
+        onCanvasChange(jsonData["n"],jsonData["m"],maze,dfs_state);
+      }
+    }catch (e){
+      print(e);
+    }
     // final result=await runSystemCommand("./maze.exe");
 
   }
   Future<void> _readMaze() async{
-
+    print(maze);
+    a.add(123);
+    print(a);
     try{
       final result=await FilePicker.platform.pickFiles(
         type: FileType.custom,
@@ -54,14 +89,16 @@ class Sidebar extends StatelessWidget {
                 for (final element in row) {
                   if (element is int) {
                     intRow.add(element);
-                    pre_state.add(0);
+                    pre_state.add(10000);
                   }
                 }
                 maze.add(intRow);
                 dfs_state.add(pre_state);
               }
             }
+            print("(((((((((((((((((((((((((((");
             print(maze);
+            print(")))))))))))))))))))))))))))");
             onCanvasChange(jsonData["n"],jsonData["m"],maze,dfs_state);
           }
         }catch (e){
@@ -135,26 +172,6 @@ class Sidebar extends StatelessWidget {
           Divider(),
           InkWell(
             onTap: () {
-              _runDfs();
-            },
-            child: Container(
-              height: 50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.refresh,
-                    color: Colors.blueAccent,
-                  ),
-                  Text("开始运行")
-                ],
-              ),
-            ),
-          ),
-          Divider(),
-          InkWell(
-            onTap: () {
               _createMaze(context);
             },
             child: Container(
@@ -168,6 +185,26 @@ class Sidebar extends StatelessWidget {
                     color: Colors.blueAccent,
                   ),
                   Text("手动创建一张表")
+                ],
+              ),
+            ),
+          ),
+          Divider(),
+          InkWell(
+            onTap: () {
+              _runDfs();
+            },
+            child: Container(
+              height: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.refresh,
+                    color: Colors.blueAccent,
+                  ),
+                  Text("开始运行")
                 ],
               ),
             ),

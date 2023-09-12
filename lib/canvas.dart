@@ -23,6 +23,8 @@ class Canvas extends StatefulWidget {
 // 状态：当前搜索深度，需要传入搜索后的深度状态图，传入图的n，m，传入图的原始状态
 class _CanvasState extends State<Canvas> {
   int get_block_state(int x, int y) {
+    print(widget.maze);
+    print(widget.blockStates);
     if (widget.maze[x][y] == 0) {
       if (widget.depth > widget.blockStates[x][y]) {
         return 1;

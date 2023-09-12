@@ -11,7 +11,7 @@ class MyApp extends StatefulWidget{
 
 }
 class _MyAppState extends State<MyApp> {
-  int row=1,col=1;
+  int row=1,col=1,step=1;
   List<List<int>> maze=[[0]];
   List<List<int>> blockState=[[0]];
   void _handle_n_m(int x,int y,List<List<int>> maze_data,List<List<int>> dfs_data){
@@ -20,6 +20,11 @@ class _MyAppState extends State<MyApp> {
       col=y;
       maze=maze_data;
       blockState=dfs_data;
+    });
+  }
+  void _dealNextStep(int x){
+    setState(() {
+      step=step+1;
     });
   }
   @override
@@ -38,10 +43,10 @@ class _MyAppState extends State<MyApp> {
         body: Row(
           children: [
             Spacer(),
-            Canvas(n: row, m: col,maze: maze,blockStates: blockState,depth: 0,),
+            Canvas(n: row, m: col,maze: maze,blockStates: blockState,depth: step,),
             Spacer(),
             VerticalDivider(),
-            Sidebar(_handle_n_m)
+            Sidebar(_handle_n_m,_dealNextStep)
           ],
         ),
       ),

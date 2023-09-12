@@ -17,7 +17,7 @@ class _BlockState extends State<Block> {
   late int beenVisit;
 
   Color getBlockColor() {
-    if (widget.blockState == 1) return Colors.yellow[200]!;
+    if (widget.blockState == 1) return Colors.yellow[100]!;
     else if(widget.blockState==0) return Colors.yellow[50]!;
     else return Colors.yellow[400]!;
   }
