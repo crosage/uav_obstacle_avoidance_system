@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:spfa/config.dart';
 
 class CreateMazeDialog extends StatefulWidget {
   @override
@@ -91,7 +92,7 @@ class _CreateMazeDialogState extends State<CreateMazeDialog> {
                           "maze": maze,
                         };
                         final jsonString=jsonEncode(dataToSave);
-                        final file=File("./maze.json");
+                        final file=File(mazeSavePath);
                         file.writeAsString(jsonString);
                         Navigator.of(context).pop();
                       },

@@ -38,7 +38,7 @@ class _BlockState extends State<Block> {
           // been_choose=been_choose;
         },
         child: AnimatedContainer(
-          duration: Duration(seconds: 3),
+          duration: Duration(seconds: 1),
           // height: widget.block_height,
           // width: widget.block_width,
           color: getBlockColor(),

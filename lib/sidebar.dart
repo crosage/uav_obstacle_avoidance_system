@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:spfa/create_maze.dart';
 import 'block.dart';
 import 'dart:io';
+import "config.dart";
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 class Sidebar extends StatefulWidget{
@@ -28,10 +29,10 @@ class _SidebarState extends State<Sidebar> {
     return output;
   }
   Future<void> _runDfs() async{
-    final path=Directory.current.path+"\\"+"maze.exe";
+    final path=mazeRunPath;
     await Process.run(path,[]);
     final result=await runSystemCommand(path,[]);
-    final resultPath=Directory.current.path+"\\"+"result.json";
+    final resultPath=resultSavePath;
     try{
       final file=File(resultPath!);
       if(await file.exists()){
