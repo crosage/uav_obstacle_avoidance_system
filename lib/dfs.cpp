@@ -76,9 +76,9 @@ int main() {
         }
     }
     dfs(0,0);
-//    sort(Path.begin(),Path.end(),[](const vector<pair<int,int>>& a, const vector<pair<int,int>>& b)->bool{
-//        return a.size() < b.size();
-//    });
+    sort(Path.begin(),Path.end(),[](const vector<pair<int,int>>& a, const vector<pair<int,int>>& b)->bool{
+        return a.size() < b.size();
+    });
     json maze_result,path_result,result;
     for (int i = 0; i < n; ++i) {
         json rowArray;
@@ -101,7 +101,6 @@ int main() {
         }
         path_result.push_back(rowArray);
     }
-    result["maze"]=maze_result;
     result["paths"]=path_result;
     ofstream result_file("D:\\flutters\\spfa\\lib\\result.json");
     if(result_file.is_open()){

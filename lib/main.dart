@@ -14,17 +14,22 @@ class _MyAppState extends State<MyApp> {
   int row=1,col=1,step=1;
   List<List<int>> maze=[[0]];
   List<List<int>> blockState=[[0]];
-  void _handle_n_m(int x,int y,List<List<int>> maze_data,List<List<int>> dfs_data){
+  List<List<List<int>>> paths=[[[0]]];
+  void _handle_n_m(int x,int y,List<List<int>> maze_data){
     setState(() {
       row=x;
       col=y;
       maze=maze_data;
-      blockState=dfs_data;
     });
   }
-  void _dealNextStep(){
+  void _dealBlockState(List<List<int>> blockData){
     setState(() {
-      step=step+1;
+      blockState=blockData;
+    });
+  }
+  void _handlePathData(List<List<List<int>>> pathData){
+    setState(() {
+      paths=pathData;
     });
   }
   @override
@@ -46,7 +51,7 @@ class _MyAppState extends State<MyApp> {
             Canvas(n: row, m: col,maze: maze,blockStates: blockState,depth: step,),
             Spacer(),
             VerticalDivider(),
-            Sidebar(_handle_n_m,_dealNextStep)
+            Sidebar(_handle_n_m,_dealBlockState,_handlePathData)
           ],
         ),
       ),

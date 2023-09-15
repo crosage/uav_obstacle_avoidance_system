@@ -6,9 +6,10 @@ import "config.dart";
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 class Sidebar extends StatefulWidget{
-  final Function(int,int,List<List<int>>,List<List<int>>) onCanvasChange;
-  final Function() nextStep;
-  Sidebar(this.onCanvasChange,this.nextStep);
+  final Function(int,int,List<List<int>>) onCanvasChange;
+  final Function(List<List<List<int>>> pathData) getPaths;
+  final Function(List<List<int>>) getBlockState;
+  Sidebar(this.onCanvasChange,this.getBlockState,this.getPaths);
   @override
   _SidebarState createState() => _SidebarState();
 }
@@ -16,7 +17,7 @@ class _SidebarState extends State<Sidebar> {
 
   List<int> a=[];
   List<List<int>> maze=[];
-  List<List<int>> dfsState=[];
+  List<List<List<int>>> pathData=[];
   int n=1,m=1;
   Future<String> runSystemCommand(String command,List<dynamic> arguments) async{
     print(command);
@@ -38,8 +39,8 @@ class _SidebarState extends State<Sidebar> {
       if(await file.exists()){
         String content=await file.readAsString();
         Map<String,dynamic> jsonData=json.decode(content);
-        dfsState.clear();
-        final mazeState=jsonData["maze"];
+        pathData.clear();
+        final mazeState=jsonData["paths"];
         for (final row in mazeState) {
           if (row is List<dynamic>) {
             final List<int> intRow = [];
@@ -48,10 +49,10 @@ class _SidebarState extends State<Sidebar> {
                 intRow.add(element);
               }
             }
-            dfsState.add(intRow);
+            pathData.add(intRow);
           }
         }
-        widget.onCanvasChange(n,m,maze,dfsState);
+
       }
     }catch (e){
       print(e);
@@ -75,7 +76,7 @@ class _SidebarState extends State<Sidebar> {
             Map<String,dynamic> jsonData=json.decode(content);
             print("n="+jsonData["n"].toString()+" m="+jsonData["m"].toString());
             maze.clear();
-            dfsState.clear();
+            pathData.clear();
             final mazeData=jsonData["maze"];
             for (final row in mazeData) {
               if (row is List<dynamic>) {
@@ -88,12 +89,12 @@ class _SidebarState extends State<Sidebar> {
                   }
                 }
                 maze.add(intRow);
-                dfsState.add(pre_state);
+                pathData.add(pre_state);
               }
             }
             n=jsonData["n"];
             m=jsonData["m"];
-            widget.onCanvasChange(n,m,maze,dfsState);
+            widget.onCanvasChange(n,m,maze,pathData);
           }
         }catch (e){
           print(e);
@@ -102,9 +103,6 @@ class _SidebarState extends State<Sidebar> {
     }catch (e){
       print(e);
     }
-    print(")))))))))))");
-    print(maze);
-    print("(((((((((((");
     // final file=File("./maze.json");
 
   }

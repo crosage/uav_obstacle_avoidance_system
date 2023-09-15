@@ -11,20 +11,34 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:spfa/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  Map<String, dynamic> data = {
+    "maze": [
+      [1, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+    ],
+    "paths": [
+      [
+        [0, 0],
+        [1, 0],
+        [2, 0],
+        [2, 1],
+        [2, 2],
+      ],
+      // 其他路径...
+    ],
+  };
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  // 从数据中提取paths并存储在一个List中
+  List<List<List<int>>> paths = (data["paths"] as List<dynamic>).map((path) {
+    return (path as List<dynamic>).map((step) {
+      return (step as List<dynamic>).cast<int>().toList();
+    }).toList();
+  }).toList();
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  // 打印路径数据
+  for (var path in paths) {
+    print(path);
+  }
   });
 }
