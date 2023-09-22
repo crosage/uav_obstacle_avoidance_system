@@ -22,17 +22,17 @@ bool isValid(int x, int y) {
     return x >= 0 && x < n && y >= 0 && y < m && maze[x][y] == 0 && !visited[x][y];
 }
 void dfs(int x, int y) {
-    printf("push x=%d y=%d\n",x,y);
+//    printf("push x=%d y=%d\n",x,y);
     visited[x][y] = 1;
     lu.push_back(make_pair(x,y));
     if (x == n - 1 && y == m - 1) {
         Path.push_back(lu);
         int sz=lu.size();
-        printf("########################\n");
-        for(int i=0;i<sz;i++){
-            printf("%d %d\n",lu[i].first,lu[i].second);
-        }
-        puts("**********************");
+//        printf("########################\n");
+//        for(int i=0;i<sz;i++){
+//            printf("%d %d\n",lu[i].first,lu[i].second);
+//        }
+//        puts("**********************");
         visited[x][y] = 0;
         lu.pop_back();
         return ;
@@ -43,7 +43,7 @@ void dfs(int x, int y) {
         int newY = y + dy[i];
 
         if (isValid(newX, newY)) {
-        printf("from %d %d run to %d %d\n",x,y,newX,newY);
+//        printf("from %d %d run to %d %d\n",x,y,newX,newY);
             dfs(newX, newY);
             visited[newX][newY]=0;
         }
@@ -51,7 +51,7 @@ void dfs(int x, int y) {
         tot++;
     }
 //    visited[x][y]=0;
-    printf("pop x=%d y=%d\n",x,y);
+//    printf("pop x=%d y=%d\n",x,y);
     lu.pop_back();
 }
 

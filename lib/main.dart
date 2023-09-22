@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:spfa/canvas.dart';
 import 'sidebar.dart';
-
+// 由sidebar读取数据，回传到父组件main，由main传递给canvas
 void main() {
   runApp(MyApp());
 }
@@ -11,9 +11,9 @@ class MyApp extends StatefulWidget{
 
 }
 class _MyAppState extends State<MyApp> {
-  int row=1,col=1,step=1;
-  List<List<int>> maze=[[0]];
-  List<List<int>> blockState=[[0]];
+  int row=1,col=1;
+  List<List<int>> maze=[];
+  List<List<int>> blockState=[];
   List<List<List<int>>> paths=[[[0]]];
   void _handle_n_m(int x,int y,List<List<int>> maze_data){
     setState(() {
@@ -25,13 +25,15 @@ class _MyAppState extends State<MyApp> {
   void _dealBlockState(List<List<int>> blockData){
     setState(() {
       blockState=blockData;
+      print("main::::::");
+      print(blockState);
     });
   }
-  void _handlePathData(List<List<List<int>>> pathData){
-    setState(() {
-      paths=pathData;
-    });
-  }
+  // void _handlePathData(List<List<List<int>>> pathData){
+  //   setState(() {
+  //     paths=pathData;
+  //   });
+  // }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -48,10 +50,13 @@ class _MyAppState extends State<MyApp> {
         body: Row(
           children: [
             Spacer(),
-            Canvas(n: row, m: col,maze: maze,blockStates: blockState,depth: step,),
+            if(maze.isNotEmpty&&blockState.isNotEmpty)
+              Canvas(n: row, m: col,maze: maze,blockStates: blockState,)
+            else
+              Spacer(),
             Spacer(),
             VerticalDivider(),
-            Sidebar(_handle_n_m,_dealBlockState,_handlePathData)
+            Sidebar(_handle_n_m,_dealBlockState)
           ],
         ),
       ),
