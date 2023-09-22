@@ -1,1 +1,1 @@
-lib/include/* linguist-vendored
+lib/include/* -export-ignore
