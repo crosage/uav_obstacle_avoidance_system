@@ -18,7 +18,7 @@ class _BlockState extends State<Block> {
 
   Color getBlockColor() {
     if (widget.blockState == 1) return Colors.yellow[50]!;
-    else if(widget.blockState==0) return Colors.transparent;
+    else if(widget.blockState==0) return Colors.grey[50]!;
     else return Colors.yellow[100]!;
   }
 
@@ -43,7 +43,7 @@ class _BlockState extends State<Block> {
           // width: widget.block_width,
           color: getBlockColor(),
           child: Center(
-            child: Text("0"),
+            child: Text(" "),
           ),
         ));
   }
