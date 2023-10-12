@@ -1,12 +1,17 @@
+import 'package:elegant_notification/elegant_notification.dart';
+import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
+// import 'package:motion_toast/resources/arrays.dart';
 import 'package:spfa/create_maze.dart';
 import 'package:spfa/result_list.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'block.dart';
 import 'dart:io';
 import "config.dart";
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
-import "package:motion_toast/motion_toast.dart";
+// import "package:motion_toast/motion_toast.dart";
 
 List<List<List<int>>> convertDynamicList(List<dynamic> dynamicList) {
   List<List<List<int>>> intList = [];
@@ -68,13 +73,24 @@ class _SidebarState extends State<Sidebar> {
         print(jsonData);
         pathData.clear();
         pathData = convertDynamicList(jsonData["paths"]);
-        MotionToast.success(
-                title: Text("Success"), description: Text("dfs运行结束"))
-            .show(context);
+        ElegantNotification.info(
+          width: 70,
+          // background: Colors.grey[200]!,
+          title: Text("info"),
+          description: Text("dfs运行结束"),
+          animation: AnimationType.fromRight,
+          notificationPosition: NotificationPosition.bottomRight,
+        ).show(context);
       }
     } catch (e) {
-      MotionToast.error(title: Text("Erroe"), description: Text("发生了一些错误:\n$e"))
-          .show(context);
+      ElegantNotification.error(
+        width: 70,
+        // background: Colors.grey[200]!,
+        title: Text("info"),
+        description: Text("发生错误:\n$e"),
+        animation: AnimationType.fromRight,
+        notificationPosition: NotificationPosition.bottomRight,
+      ).show(context);
       print(e);
     }
   }
@@ -107,7 +123,7 @@ class _SidebarState extends State<Sidebar> {
             for (final element in row) {
               if (element is int) {
                 intRow.add(element);
-                preState.add(10000);
+                preState.add(0);
               }
             }
             maze.add(intRow);
@@ -118,17 +134,30 @@ class _SidebarState extends State<Sidebar> {
         m = jsonData["m"];
         widget.getBlockState(blockState);
         widget.onCanvasChange(n, m, maze);
-        MotionToast.success(
-                title: Text("Success"), description: Text("创建了一个$n*$m的表格"))
-            .show(context);
+        // ElegantNotification.info(description: )
+        ElegantNotification.success(
+          width: 70,
+          // background: Colors.grey[200]!,
+          title: Text("info"),
+          description: Text("$n*$m"),
+          animation: AnimationType.fromRight,
+          notificationPosition: NotificationPosition.bottomRight,
+        ).show(context);
       }
     } catch (e) {
-      MotionToast.error(title: Text("Erroe"), description: Text("发生了一些错误:\n$e"))
-          .show(context);
+      ElegantNotification.error(
+        width: 70,
+        title: Text("info"),
+        description: Text("$e"),
+        animation: AnimationType.fromRight,
+        notificationPosition: NotificationPosition.bottomRight,
+      ).show(context);
       print(e);
     }
   }
+  void _runAstar(){
 
+  }
   // final file=File("./maze.json");
 
   void _createMaze(BuildContext context) {
@@ -155,9 +184,12 @@ class _SidebarState extends State<Sidebar> {
           blockState[i][j] = 0;
         }
       }
-      for (List<int> item in path) {
-        blockState[item[0]][item[1]] = 1;
+
+      for (int i = 0; i < path.length; i++) {
+        List<int> item = path[i];
+        blockState[item[0]][item[1]] = i+1;
       }
+
       print(blockState);
       widget.getBlockState(blockState);
     });
@@ -235,6 +267,8 @@ class _SidebarState extends State<Sidebar> {
             onTap: () {
               _runDfs();
               print("############");
+              String currentDirectory = Directory.current.path;
+              print('当前运行路径: $currentDirectory');
             },
             child: Container(
               height: 50,
@@ -247,6 +281,27 @@ class _SidebarState extends State<Sidebar> {
                     color: Colors.blueAccent,
                   ),
                   Text("使用dfs运行")
+                ],
+              ),
+            ),
+          ),
+          Divider(),
+          InkWell(
+            onTap: () {
+              _runDfs();
+              // print("############");
+            },
+            child: Container(
+              height: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.looks_two_outlined,
+                    color: Colors.blueAccent,
+                  ),
+                  Text("使用A*运行")
                 ],
               ),
             ),
@@ -273,28 +328,7 @@ class _SidebarState extends State<Sidebar> {
                     Icons.navigate_next,
                     color: Colors.blueAccent,
                   ),
-                  Text("查看dfs运行结果")
-                ],
-              ),
-            ),
-          ),
-          Divider(),
-          InkWell(
-            onTap: () {
-              _runDfs();
-              // print("############");
-            },
-            child: Container(
-              height: 50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.looks_two_outlined,
-                    color: Colors.blueAccent,
-                  ),
-                  Text("使用A*运行")
+                  Text("查看运行结果")
                 ],
               ),
             ),

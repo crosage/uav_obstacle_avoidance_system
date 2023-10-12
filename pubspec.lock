@@ -49,6 +49,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.5"
+  elegant_notification:
+    dependency: "direct main"
+    description:
+      name: elegant_notification
+      sha256: f3b8aad4f8eb0df10d06deceb9a2b64b8c450ec7a1f896281d3563b6434f0574
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.11.2"
   fake_async:
     dependency: transitive
     description:
@@ -136,14 +144,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.9.1"
-  motion_toast:
-    dependency: "direct main"
-    description:
-      name: motion_toast
-      sha256: "5742e33ec2f11210f5269294304fb9bd0f30eace78ad23925eb9306dce7763c9"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.7.9"
   path:
     dependency: transitive
     description:
@@ -221,6 +221,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.6.0"
+  top_snackbar_flutter:
+    dependency: "direct main"
+    description:
+      name: top_snackbar_flutter
+      sha256: "22d14664a13db6ac714934c3382bd8d4daa57fb888a672f922df71981c5a5cb2"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.1.0"
   vector_math:
     dependency: transitive
     description:

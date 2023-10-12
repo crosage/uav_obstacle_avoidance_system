@@ -28,11 +28,6 @@ void dfs(int x, int y) {
     if (x == n - 1 && y == m - 1) {
         Path.push_back(lu);
         int sz=lu.size();
-//        printf("########################\n");
-//        for(int i=0;i<sz;i++){
-//            printf("%d %d\n",lu[i].first,lu[i].second);
-//        }
-//        puts("**********************");
         visited[x][y] = 0;
         lu.pop_back();
         return ;
@@ -41,13 +36,10 @@ void dfs(int x, int y) {
     for (int i = 0; i < 4; ++i) {
         int newX = x + dx[i];
         int newY = y + dy[i];
-
         if (isValid(newX, newY)) {
-//        printf("from %d %d run to %d %d\n",x,y,newX,newY);
             dfs(newX, newY);
             visited[newX][newY]=0;
         }
-
         tot++;
     }
 //    visited[x][y]=0;
@@ -59,11 +51,12 @@ int main() {
     char buffer[MAX_PATH];
     GetModuleFileName(NULL, buffer, MAX_PATH);
     cerr<<buffer<<"**************"<<endl;
-    ifstream file("D:\\flutters\\spfa\\lib\\maze.json");
+    ifstream file(".\\maze.json");
     if (!file.is_open()) {
         cerr << "is_not_json" << endl;
         return 1;
     }
+    printf("123456789\n");
     json maze_data;
     file>>maze_data;
     n=maze_data["n"];
@@ -102,7 +95,7 @@ int main() {
         path_result.push_back(rowArray);
     }
     result["paths"]=path_result;
-    ofstream result_file("D:\\flutters\\spfa\\lib\\result.json");
+    ofstream result_file(".\\result.json");
     if(result_file.is_open()){
         result_file<<result;
         result_file.close();

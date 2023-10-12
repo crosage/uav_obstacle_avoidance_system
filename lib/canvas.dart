@@ -24,6 +24,7 @@ class _CanvasState extends State<Canvas> {
     // print(widget.maze);
     // print(widget.blockStates);
     if (widget.maze[x][y] == 0) {
+      return widget.blockStates[x][y];
       if (widget.blockStates[x][y]==1) {
         return 1;
       }
