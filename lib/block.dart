@@ -4,7 +4,6 @@ class Block extends StatefulWidget {
   final int x;
   final int y;
   final int blockState;
-
   // 1已经遍历 0没有遍历 -1为团块
   const Block(
       {super.key, required this.x, required this.y, required this.blockState});

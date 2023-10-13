@@ -25,16 +25,8 @@ class _MyAppState extends State<MyApp> {
   void _dealBlockState(List<List<int>> blockData){
     setState(() {
       blockState=blockData;
-      print("main::::::");
-      print(blockState);
     });
   }
-
-  // void _handlePathData(List<List<List<int>>> pathData){
-  //   setState(() {
-  //     paths=pathData;
-  //   });
-  // }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
