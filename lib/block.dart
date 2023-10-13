@@ -4,7 +4,6 @@ class Block extends StatefulWidget {
   final int x;
   final int y;
   final int blockState;
-
   // 1已经遍历 0没有遍历 -1为团块
   const Block(
       {super.key, required this.x, required this.y, required this.blockState});
@@ -19,11 +18,11 @@ class _BlockState extends State<Block> {
 
   Color getBlockColor() {
     if (widget.blockState >= 1)
-      return Colors.grey[200]!;
+      return Color.fromARGB(255, 252, 250, 242);
     else if (widget.blockState == 0)
-      return Colors.grey[50]!;
+      return Color.fromARGB(255, 255, 255, 251);
     else
-      return Colors.grey[400]!;
+      return Color.fromARGB(255, 145, 152, 159);
   }
 
   Widget getNumber() {

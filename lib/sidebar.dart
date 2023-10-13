@@ -1,16 +1,14 @@
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
-// import 'package:motion_toast/resources/arrays.dart';
 import 'package:spfa/create_maze.dart';
 import 'package:spfa/result_list.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'block.dart';
 import 'dart:io';
 import "config.dart";
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
+
 // import "package:motion_toast/motion_toast.dart";
 List<List<List<int>>> convertDynamicList(List<dynamic> dynamicList) {
   print("dynamicList");
@@ -22,8 +20,6 @@ List<List<List<int>>> convertDynamicList(List<dynamic> dynamicList) {
       List<int> intInnerList = [];
       print(innerList);
       for (var value in innerList) {
-        print("hahahahah\n");
-        print("value::::::::$value\n");
         intInnerList.add(value as int);
       }
       nestedList.add(intInnerList);
@@ -52,13 +48,13 @@ class _SidebarState extends State<Sidebar> {
 
   Future<String> runSystemCommand(
       String command, List<dynamic> arguments) async {
-    print(command);
+    // print(command);
     final process = await Process.run(command, []);
-    print(process);
+    // print(process);
     final output = await process.stdout;
     final error = await process.stderr;
-    print(output);
-    print(error);
+    // print(output);
+    // print(error);
     return output;
   }
 
@@ -96,6 +92,33 @@ class _SidebarState extends State<Sidebar> {
         notificationPosition: NotificationPosition.bottomRight,
       ).show(context);
       print(e);
+    }
+  }
+
+  Future<void> _generate() async {
+    // final resultPath = resultSavePath;
+    try {
+      final path = generatePath;
+      print(path);
+      await Process.run(path, []);
+      final result = await runSystemCommand(path, []);
+      ElegantNotification.success(
+        width: 70,
+        // background: Colors.grey[200]!,
+        title: Text("info"),
+        description: Text("随机生成完成"),
+        animation: AnimationType.fromRight,
+        notificationPosition: NotificationPosition.bottomRight,
+      ).show(context);
+    } catch (e) {
+      ElegantNotification.error(
+        width: 70,
+        // background: Colors.grey[200]!,
+        title: Text("info"),
+        description: Text("发生错误:\n$e"),
+        animation: AnimationType.fromRight,
+        notificationPosition: NotificationPosition.bottomRight,
+      ).show(context);
     }
   }
 
@@ -141,9 +164,8 @@ class _SidebarState extends State<Sidebar> {
         // ElegantNotification.info(description: )
         ElegantNotification.success(
           width: 70,
-          // background: Colors.grey[200]!,
           title: Text("info"),
-          description: Text("$n*$m"),
+          description: Text("创建了一个$n*$m的表格"),
           animation: AnimationType.fromRight,
           notificationPosition: NotificationPosition.bottomRight,
         ).show(context);
@@ -159,25 +181,21 @@ class _SidebarState extends State<Sidebar> {
       print(e);
     }
   }
-  Future<void> _runAstar() async{
+
+  Future<void> _runAstar() async {
     final path = astarRunPath;
     await Process.run(path, []);
     final result = await runSystemCommand(path, []);
     final resultPath = astarResultSavePath;
-    print("/********************\n");
     try {
       final file = File(resultPath!);
       if (await file.exists()) {
         String content = await file.readAsString();
         Map<String, dynamic> jsonData = json.decode(content);
-        print(jsonData);
         pathData.clear();
-        print("8797987979\n");
-        print(jsonData["astar"]);
-        List<dynamic> l=[];
+        List<dynamic> l = [];
         l.add(jsonData["astar"]);
         pathData = convertDynamicList(l);
-        print("789787454545445547\n");
         ElegantNotification.info(
           width: 70,
           // background: Colors.grey[200]!,
@@ -199,6 +217,7 @@ class _SidebarState extends State<Sidebar> {
       print(e);
     }
   }
+
   // final file=File("./maze.json");
 
   void _createMaze(BuildContext context) {
@@ -228,7 +247,7 @@ class _SidebarState extends State<Sidebar> {
 
       for (int i = 0; i < path.length; i++) {
         List<int> item = path[i];
-        blockState[item[0]][item[1]] = i+1;
+        blockState[item[0]][item[1]] = i + 1;
       }
 
       print(blockState);
@@ -264,23 +283,22 @@ class _SidebarState extends State<Sidebar> {
             ),
           ),
           Divider(),
-          if(n!=1&&m!=1)
-              Container(
-                height: 50,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.crop_square_sharp,
-                      color: Colors.greenAccent,
-                    ),
-                    Text("当前为$n*$m的矩阵")
-                  ],
-                ),
+          if (n != 1 && m != 1)
+            Container(
+              height: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.crop_square_sharp,
+                    color: Colors.greenAccent,
+                  ),
+                  Text("当前为$n*$m的矩阵")
+                ],
               ),
-          if(n!=1&&m!=1)
-            Divider(),
+            ),
+          if (n != 1 && m != 1) Divider(),
           InkWell(
             onTap: () {
               _readMaze(0);
@@ -347,7 +365,6 @@ class _SidebarState extends State<Sidebar> {
           InkWell(
             onTap: () {
               _runAstar();
-              // print("############");
             },
             child: Container(
               height: 50,
@@ -414,6 +431,26 @@ class _SidebarState extends State<Sidebar> {
                     color: Colors.blueAccent,
                   ),
                   Text("查看astar运行结果")
+                ],
+              ),
+            ),
+          ),
+          Divider(),
+          InkWell(
+            onTap: () {
+              _generate();
+            },
+            child: Container(
+              height: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.cached,
+                    color: Colors.blueAccent,
+                  ),
+                  Text("随机生成")
                 ],
               ),
             ),

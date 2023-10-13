@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <concepts>
 #include <vector>
 #include <queue>
@@ -264,13 +264,21 @@ void printc(Args...args) {
 }
 
 std::vector<std::vector<int>> generator_map(int row, int col) {
-	auto mt = std::mt19937_64{};
+	int r=rand()%10+1;
+//	printc(r);
 	while (true) {
 		std::vector<std::vector<int>> ans(row);
 		for (auto& i : ans) {
 			i.resize(col);
 			for (auto& j : i) {
-				j = mt() & 0x1;
+			    r=rand()%10+1;
+			    if(r<=2){
+			        j=1;
+			    }
+			    else {
+			        j=0;
+			    }
+//				j = mt() & 0x1;
 			}
 		}
 		if (!AStar(Graph{ ans }, Point{ 0,0 }, Point{ row - 1,col - 1 }).empty()) {
@@ -280,43 +288,28 @@ std::vector<std::vector<int>> generator_map(int row, int col) {
 }
 
 int main() {
-    std::ifstream input_file("D:\\flutters\\spfa\\lib\\maze.json");
-    if(!input_file.is_open()){
-        std::cerr<<"Fail to open input.json"<<std::endl;
-        return 1;
-    }
-    json input_json;
-    input_file>>input_json;
-    std::cout<<"********"<<std::endl;
-    std::cout<<input_json["maze"]<<std::endl;
-//    std::cout<<typedef(input_json["map"])<<std::endl;
-    Graph<int> g(input_json["maze"]);
-    std::cout<<"********"<<std::endl;
-//	Graph<int> g{ {{0,0,0,1},{1,0,0,0},{0,1,0,0},{0,0,0,0}} };
-	auto t1 = AStar(g, { 0,0 }, { int(input_json["n"])-1,int(input_json["m"])-1});
-	auto t2 = AStar(g, { 0,0 }, { int(input_json["n"])-1,int(input_json["m"])-1 }, true);
-	auto t3 = AStar_o(g, { 0,0 }, { int(input_json["n"])-1,int(input_json["m"])-1 });
-	std::reverse(t1.begin(), t1.end());
-	std::reverse(t2.begin(), t2.end());
-	std::reverse(t3.begin(),t3.end());
-    json points;
-    for(auto i : t1){
-        std::cout<<i<<std::endl;
-        std::vector<int> v;
-        v.push_back(i._x);
-        v.push_back(i._y);
-        points.push_back(v);
-        std::cout<<points<<std::endl;
-    }
-
-//    std::cout<<result<<std::endl;
     json result;
-    result["astar"]=points;
-    std::ofstream result_file("D:\\flutters\\spfa\\lib\\astar_result.json");
+    srand(time(0));
+//    int n=;
+//    int m=100;
+    int n=rand()%30+10;
+    int m=rand()%30+10;
+    std::vector<std::vector<int>>g=generator_map(n,m);
+    json maze;
+    for(auto& i : g){
+        json rowData;
+        for(auto& j:i){
+             rowData.push_back(j);
+        }
+        maze.push_back(rowData);
+    }
+    result["n"]=n;
+    result["m"]=m;
+    result["maze"]=maze;
+    std::ofstream result_file("D:\\flutters\\spfa\\lib\\maze.json");
     if(result_file.is_open()){
         result_file<<result;
         result_file.close();
     }
-	printc(t1,"\n\n",t2,"\n\n",t3);
 
 }
