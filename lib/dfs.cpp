@@ -51,12 +51,11 @@ int main() {
     char buffer[MAX_PATH];
     GetModuleFileName(NULL, buffer, MAX_PATH);
     cerr<<buffer<<"**************"<<endl;
-    ifstream file(".\\maze.json");
+    ifstream file("D:\\flutters\\spfa\\lib\\maze.json");
     if (!file.is_open()) {
         cerr << "is_not_json" << endl;
         return 1;
     }
-    printf("123456789\n");
     json maze_data;
     file>>maze_data;
     n=maze_data["n"];
@@ -95,7 +94,7 @@ int main() {
         path_result.push_back(rowArray);
     }
     result["paths"]=path_result;
-    ofstream result_file(".\\result.json");
+    ofstream result_file("D:\\flutters\\spfa\\lib\\result.json");
     if(result_file.is_open()){
         result_file<<result;
         result_file.close();

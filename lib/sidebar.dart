@@ -12,14 +12,18 @@ import "config.dart";
 import 'dart:convert';
 import 'package:file_picker/file_picker.dart';
 // import "package:motion_toast/motion_toast.dart";
-
 List<List<List<int>>> convertDynamicList(List<dynamic> dynamicList) {
+  print("dynamicList");
+  print(dynamicList);
   List<List<List<int>>> intList = [];
   for (var dynamicElement in dynamicList) {
     List<List<int>> nestedList = [];
     for (var innerList in dynamicElement) {
       List<int> intInnerList = [];
+      print(innerList);
       for (var value in innerList) {
+        print("hahahahah\n");
+        print("value::::::::$value\n");
         intInnerList.add(value as int);
       }
       nestedList.add(intInnerList);
@@ -155,8 +159,45 @@ class _SidebarState extends State<Sidebar> {
       print(e);
     }
   }
-  void _runAstar(){
-
+  Future<void> _runAstar() async{
+    final path = astarRunPath;
+    await Process.run(path, []);
+    final result = await runSystemCommand(path, []);
+    final resultPath = astarResultSavePath;
+    print("/********************\n");
+    try {
+      final file = File(resultPath!);
+      if (await file.exists()) {
+        String content = await file.readAsString();
+        Map<String, dynamic> jsonData = json.decode(content);
+        print(jsonData);
+        pathData.clear();
+        print("8797987979\n");
+        print(jsonData["astar"]);
+        List<dynamic> l=[];
+        l.add(jsonData["astar"]);
+        pathData = convertDynamicList(l);
+        print("789787454545445547\n");
+        ElegantNotification.info(
+          width: 70,
+          // background: Colors.grey[200]!,
+          title: Text("info"),
+          description: Text("astar运行结束"),
+          animation: AnimationType.fromRight,
+          notificationPosition: NotificationPosition.bottomRight,
+        ).show(context);
+      }
+    } catch (e) {
+      ElegantNotification.error(
+        width: 70,
+        // background: Colors.grey[200]!,
+        title: Text("info"),
+        description: Text("发生错误:\n$e"),
+        animation: AnimationType.fromRight,
+        notificationPosition: NotificationPosition.bottomRight,
+      ).show(context);
+      print(e);
+    }
   }
   // final file=File("./maze.json");
 
@@ -223,6 +264,23 @@ class _SidebarState extends State<Sidebar> {
             ),
           ),
           Divider(),
+          if(n!=1&&m!=1)
+              Container(
+                height: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.crop_square_sharp,
+                      color: Colors.greenAccent,
+                    ),
+                    Text("当前为$n*$m的矩阵")
+                  ],
+                ),
+              ),
+          if(n!=1&&m!=1)
+            Divider(),
           InkWell(
             onTap: () {
               _readMaze(0);
@@ -288,7 +346,7 @@ class _SidebarState extends State<Sidebar> {
           Divider(),
           InkWell(
             onTap: () {
-              _runDfs();
+              _runAstar();
               // print("############");
             },
             child: Container(
@@ -334,6 +392,32 @@ class _SidebarState extends State<Sidebar> {
             ),
           ),
           Divider(),
+          InkWell(
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return resultList(
+                      paths: pathData,
+                      returnSelectPath: _dealSelectPath,
+                    );
+                  });
+            },
+            child: Container(
+              height: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.navigate_next,
+                    color: Colors.blueAccent,
+                  ),
+                  Text("查看astar运行结果")
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
