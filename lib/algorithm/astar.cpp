@@ -263,21 +263,6 @@ void printc(Args...args) {
 	(printc(args), ...);
 }
 
-std::vector<std::vector<int>> generator_map(int row, int col) {
-	auto mt = std::mt19937_64{};
-	while (true) {
-		std::vector<std::vector<int>> ans(row);
-		for (auto& i : ans) {
-			i.resize(col);
-			for (auto& j : i) {
-				j = mt() & 0x1;
-			}
-		}
-		if (!AStar(Graph{ ans }, Point{ 0,0 }, Point{ row - 1,col - 1 }).empty()) {
-			return ans;
-		}
-	}
-}
 
 int main() {
     std::ifstream input_file("D:\\flutters\\spfa\\lib\\maze.json");
@@ -293,9 +278,9 @@ int main() {
     Graph<int> g(input_json["maze"]);
     std::cout<<"********"<<std::endl;
 //	Graph<int> g{ {{0,0,0,1},{1,0,0,0},{0,1,0,0},{0,0,0,0}} };
-	auto t1 = AStar(g, { 0,0 }, { int(input_json["n"])-1,int(input_json["m"])-1});
-	auto t2 = AStar(g, { 0,0 }, { int(input_json["n"])-1,int(input_json["m"])-1 }, true);
-	auto t3 = AStar_o(g, { 0,0 }, { int(input_json["n"])-1,int(input_json["m"])-1 });
+	auto t1 = AStar(g, { int(input_json["start"][0]),int(input_json["start"][1]) }, { int(input_json["end"][0]),int(input_json["end"][1])});
+	auto t2 = AStar(g, { int(input_json["start"][0]),int(input_json["start"][1]) }, { int(input_json["end"][0]),int(input_json["end"][1]) }, true);
+	auto t3 = AStar_o(g, { int(input_json["start"][0]),int(input_json["start"][1]) }, { int(input_json["end"][0]),int(input_json["end"][1]) });
 	std::reverse(t1.begin(), t1.end());
 	std::reverse(t2.begin(), t2.end());
 	std::reverse(t3.begin(),t3.end());

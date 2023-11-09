@@ -21,6 +21,10 @@ class _BlockState extends State<Block> {
       return Color.fromARGB(255, 252, 250, 242);
     else if (widget.blockState == 0)
       return Color.fromARGB(255, 255, 255, 251);
+    else if (widget.blockState==-2)
+      return Colors.redAccent;
+    else if (widget.blockState==-3)
+      return Colors.blueAccent;
     else
       return Color.fromARGB(255, 145, 152, 159);
   }

@@ -20,10 +20,16 @@ class Canvas extends StatefulWidget {
 
 // 状态：当前搜索深度，需要传入搜索后的深度状态图，传入图的n，m，传入图的原始状态
 class _CanvasState extends State<Canvas> {
+  //0为道路，1为障碍 -2起点 -3终点
   int get_block_state(int x, int y) {
     if (widget.maze[x][y] == 0) {
       return widget.blockStates[x][y];
-    } else {
+    } else if(widget.maze[x][y]==-2){
+      return -2;
+    } else if(widget.maze[x][y]==-3){
+      return -3;
+    }
+    else {
       return -1;
     }
   }

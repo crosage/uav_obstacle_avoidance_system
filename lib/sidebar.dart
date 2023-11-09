@@ -45,6 +45,7 @@ class _SidebarState extends State<Sidebar> {
   List<List<int>> blockState = [];
   List<List<List<int>>> pathData = [];
   int n = 1, m = 1;
+  int startX=1,startY=1,endX=1,endY=1;
 
   Future<String> runSystemCommand(
       String command, List<dynamic> arguments) async {
@@ -143,6 +144,10 @@ class _SidebarState extends State<Sidebar> {
         maze.clear();
         blockState.clear();
         final mazeData = jsonData["maze"];
+        startX=jsonData["start"][0];
+        startY=jsonData["start"][1];
+        endX=jsonData["end"][0];
+        endY=jsonData["end"][1];
         for (final row in mazeData) {
           if (row is List<dynamic>) {
             final List<int> intRow = [];
@@ -159,6 +164,8 @@ class _SidebarState extends State<Sidebar> {
         }
         n = jsonData["n"];
         m = jsonData["m"];
+        maze[startX][startY]=-2;
+        maze[endX][endY]=-3;
         widget.getBlockState(blockState);
         widget.onCanvasChange(n, m, maze);
         // ElegantNotification.info(description: )
