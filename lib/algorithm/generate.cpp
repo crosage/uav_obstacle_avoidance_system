@@ -263,11 +263,16 @@ void printc(Args...args) {
 	(printc(args), ...);
 }
 
+Point<int> start;
+Point<int> end;
 std::vector<std::vector<int>> generator_map(int row, int col) {
+
 	int r=rand()%10+1;
 //	printc(r);
 	while (true) {
 		std::vector<std::vector<int>> ans(row);
+		start._x=rand()%row,start._y=rand()%col;
+		end._x=rand()%row,end._y=rand()%col;
 		for (auto& i : ans) {
 			i.resize(col);
 			for (auto& j : i) {
@@ -281,7 +286,7 @@ std::vector<std::vector<int>> generator_map(int row, int col) {
 //				j = mt() & 0x1;
 			}
 		}
-		if (!AStar(Graph{ ans }, Point{ 0,0 }, Point{ row - 1,col - 1 }).empty()) {
+		if (!AStar(Graph{ ans }, Point{ start._x,start._y }, Point{ end._x,end._y }).empty()) {
 			return ans;
 		}
 	}
@@ -290,26 +295,30 @@ std::vector<std::vector<int>> generator_map(int row, int col) {
 int main() {
     json result;
     srand(time(0));
-//    int n=;
-//    int m=100;
-    int n=rand()%30+10;
-    int m=rand()%30+10;
-    std::vector<std::vector<int>>g=generator_map(n,m);
+
+    int n = rand() % 30 + 10;
+    int m = rand() % 30 + 10;
+
+    std::vector<std::vector<int>> g = generator_map(n, m);
+
     json maze;
-    for(auto& i : g){
+    for (auto& i : g) {
         json rowData;
-        for(auto& j:i){
-             rowData.push_back(j);
+        for (auto& j : i) {
+            rowData.push_back(j);
         }
         maze.push_back(rowData);
     }
-    result["n"]=n;
-    result["m"]=m;
-    result["maze"]=maze;
+
+    result["n"] = n;
+    result["m"] = m;
+    result["start"] = {start._x, start._y};
+    result["end"] = {end._x, end._y};
+    result["maze"] = maze;
+
     std::ofstream result_file("D:\\flutters\\spfa\\lib\\maze.json");
-    if(result_file.is_open()){
-        result_file<<result;
+    if (result_file.is_open()) {
+        result_file << result;
         result_file.close();
     }
-
 }
