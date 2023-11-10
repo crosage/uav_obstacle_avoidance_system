@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spfa/canvas.dart';
+import 'package:spfa/components/canvas.dart';
 import 'sidebar.dart';
 // 由sidebar读取数据，回传到父组件main，由main传递给canvas
 void main() {

@@ -6,9 +6,11 @@
 #include "./nlohmann/json.hpp"
 using json=nlohmann::json;
 using namespace std;
+json maze_data;
 const int MAX_N = 100;
 const int MAX_M = 100;
 int maze[MAX_N][MAX_M];
+
 int visited[MAX_N][MAX_M];
 int dx[] = {-1, 1, 0, 0};
 int dy[] = {0, 0, -1, 1};
@@ -22,10 +24,11 @@ bool isValid(int x, int y) {
     return x >= 0 && x < n && y >= 0 && y < m && maze[x][y] == 0 && !visited[x][y];
 }
 void dfs(int x, int y) {
-//    printf("push x=%d y=%d\n",x,y);
+    printf("push x=%d y=%d\n",x,y);
     visited[x][y] = 1;
     lu.push_back(make_pair(x,y));
-    if (x == n - 1 && y == m - 1) {
+    if (x == int(maze_data["end"][0]) && y == int(maze_data["end"][1])) {
+
         Path.push_back(lu);
         int sz=lu.size();
         visited[x][y] = 0;
@@ -56,7 +59,7 @@ int main() {
         cerr << "is_not_json" << endl;
         return 1;
     }
-    json maze_data;
+
     file>>maze_data;
     n=maze_data["n"];
     m=maze_data["m"];
@@ -67,7 +70,8 @@ int main() {
             }
         }
     }
-    dfs(0,0);
+    printf("%d %d\n",int(maze_data["end"][0]),int(maze_data["end"][1]));
+    dfs(int(maze_data["start"][0]),int(maze_data["start"][1]));
     sort(Path.begin(),Path.end(),[](const vector<pair<int,int>>& a, const vector<pair<int,int>>& b)->bool{
         return a.size() < b.size();
     });

@@ -277,7 +277,7 @@ std::vector<std::vector<int>> generator_map(int row, int col) {
 			i.resize(col);
 			for (auto& j : i) {
 			    r=rand()%10+1;
-			    if(r<=5){
+			    if(r<=3){
 			        j=1;
 			    }
 			    else {

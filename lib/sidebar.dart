@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:spfa/components/elevated_button.dart';
 import 'package:spfa/create_maze.dart';
 import 'package:spfa/result_list.dart';
-import 'block.dart';
+import 'components/block.dart';
 import 'dart:io';
 import "config.dart";
 import 'dart:convert';

@@ -134,7 +134,8 @@ for row in range(num_rows):
 json_file_path = "maze_data.json"
 
 data={
-    "maze":maze_matrix.tolist()
+    "start":[0,0],
+    "maze":maze_matrix.tolist(),
 }
 print(data)
 # Write maze_list to the JSON file

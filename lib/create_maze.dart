@@ -3,12 +3,7 @@ import 'dart:io';
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
-// import 'package:motion_toast/resources/arrays.dart';
 import 'package:spfa/config.dart';
-// import 'package:motion_toast/motion_toast.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
-// import 'package:motion_toast/MotionToastPosition';
 
 class CreateMazeDialog extends StatefulWidget {
   @override
@@ -18,6 +13,7 @@ class CreateMazeDialog extends StatefulWidget {
 class _CreateMazeDialogState extends State<CreateMazeDialog> {
   int n = 0;
   int m = 0;
+  int startX=0,startY=0,endX=0,endY=0;
   List<List<int>> maze = [];
 
   Widget buildTextFieldGrid(int n, int m, List<List<int>> maze) {
@@ -30,6 +26,57 @@ class _CreateMazeDialogState extends State<CreateMazeDialog> {
       maze.add(l);
     }
     List<Widget> rows = [];
+    rows.add(
+      Row(
+        children: [
+          Expanded(child: TextField(
+            decoration: InputDecoration(
+              labelText: '输入起点的X坐标',
+              labelStyle: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            onChanged: (value){
+              startX=int.tryParse(value)??0;
+            },
+          ),),
+          Expanded(child: TextField(
+            decoration: InputDecoration(
+              labelText: '输入起点的Y坐标',
+              labelStyle: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            onChanged: (value){
+              startY=int.tryParse(value)??0;
+            },
+          ),),
+          Expanded(child: TextField(
+            decoration: InputDecoration(
+              labelText: '输入终点的X坐标',
+              labelStyle: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            onChanged: (value){
+              endX=int.tryParse(value)??0;
+            },
+          ),),
+          Expanded(child: TextField(
+            decoration: InputDecoration(
+              labelText: '输入终点的Y坐标',
+              labelStyle: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+            onChanged: (value){
+              endY=int.tryParse(value)??0;
+            },
+          ),),
+
+        ],
+      )
+    );
     for (int rowIndex = 0; rowIndex < n; rowIndex++) {
       List<Widget> cols = [];
       for (int colIndex = 0; colIndex < m; colIndex++) {
@@ -97,6 +144,8 @@ class _CreateMazeDialogState extends State<CreateMazeDialog> {
                         "n": n,
                         "m": m,
                         "maze": maze,
+                        "start":[startX,startY],
+                        "end":[endX,endY]
                       };
                       final jsonString = jsonEncode(dataToSave);
                       final file = File(mazeSavePath);
@@ -110,10 +159,6 @@ class _CreateMazeDialogState extends State<CreateMazeDialog> {
                         notificationPosition: NotificationPosition.bottomRight,
                       ).show(context);
                       Navigator.of(context).pop();
-
-                      // showTopSnackBar(Overlay.of(context), CustomSnackBar.success(
-                      //     message:"创建了一张$n*$m的表格\n  已保存至maze.json"
-                      // ));
                     },
                     icon: Icon(Icons.save),
                   )

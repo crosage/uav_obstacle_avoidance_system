@@ -1,4 +1,4 @@
-String mazeRunPath="D:\\flutters\\spfa\\lib\\maze.exe";
+String mazeRunPath="D:\\flutters\\spfa\\lib\\algorithm\\dfs.exe";
 String astarRunPath="D:\\flutters\\spfa\\lib\\algorithm\\astar.exe";
 String mazeSavePath="D:\\flutters\\spfa\\lib\\maze.json";
 String resultSavePath="D:\\flutters\\spfa\\lib\\result.json";

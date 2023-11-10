@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spfa/block.dart';
+import 'package:spfa/components/block.dart';
 
 class Canvas extends StatefulWidget {
   final int n;
