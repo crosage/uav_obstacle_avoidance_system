@@ -4,9 +4,10 @@ class Block extends StatefulWidget {
   final int x;
   final int y;
   final int blockState;
+  final Function onBlockChange;
   // 1已经遍历 0没有遍历 -1为团块
   const Block(
-      {super.key, required this.x, required this.y, required this.blockState});
+      {super.key, required this.x, required this.y, required this.blockState,required this.onBlockChange});
 
   @override
   _BlockState createState() => _BlockState();
@@ -32,6 +33,8 @@ class _BlockState extends State<Block> {
   Widget getNumber() {
     if (widget.blockState >= 1)
       return Text("${widget.blockState}");
+    if (widget.blockState==-2)
+      return Text("${1}");
     else
       return Text(" ");
   }

@@ -1,6 +1,7 @@
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
+import 'package:spfa/components/elevated_button.dart';
 import 'package:spfa/create_maze.dart';
 import 'package:spfa/result_list.dart';
 import 'block.dart';
@@ -45,7 +46,7 @@ class _SidebarState extends State<Sidebar> {
   List<List<int>> blockState = [];
   List<List<List<int>>> pathData = [];
   int n = 1, m = 1;
-  int startX=1,startY=1,endX=1,endY=1;
+  int startX = 1, startY = 1, endX = 1, endY = 1;
 
   Future<String> runSystemCommand(
       String command, List<dynamic> arguments) async {
@@ -144,10 +145,10 @@ class _SidebarState extends State<Sidebar> {
         maze.clear();
         blockState.clear();
         final mazeData = jsonData["maze"];
-        startX=jsonData["start"][0];
-        startY=jsonData["start"][1];
-        endX=jsonData["end"][0];
-        endY=jsonData["end"][1];
+        startX = jsonData["start"][0];
+        startY = jsonData["start"][1];
+        endX = jsonData["end"][0];
+        endY = jsonData["end"][1];
         for (final row in mazeData) {
           if (row is List<dynamic>) {
             final List<int> intRow = [];
@@ -164,8 +165,8 @@ class _SidebarState extends State<Sidebar> {
         }
         n = jsonData["n"];
         m = jsonData["m"];
-        maze[startX][startY]=-2;
-        maze[endX][endY]=-3;
+        maze[startX][startY] = -2;
+        maze[endX][endY] = -3;
         widget.getBlockState(blockState);
         widget.onCanvasChange(n, m, maze);
         // ElegantNotification.info(description: )
@@ -326,71 +327,63 @@ class _SidebarState extends State<Sidebar> {
             ),
           ),
           Divider(),
-          InkWell(
-            onTap: () {
+          IconLabelButton(
+            onPress: () {
               _createMaze(context);
             },
-            child: Container(
-              height: 50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.touch_app,
-                    color: Colors.blueAccent,
-                  ),
-                  Text("手动创建一张表")
-                ],
-              ),
+            icon: Icon(
+              Icons.touch_app,
+              color: Colors.blueAccent,
             ),
+            text: "手动创建一张表",
           ),
           Divider(),
-          InkWell(
-            onTap: () {
+          IconLabelButton(
+            onPress: () {
               _runDfs();
               print("############");
               String currentDirectory = Directory.current.path;
               print('当前运行路径: $currentDirectory');
             },
-            child: Container(
-              height: 50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.looks_one_outlined,
-                    color: Colors.blueAccent,
-                  ),
-                  Text("使用dfs运行")
-                ],
-              ),
+            icon: Icon(
+              Icons.looks_one_outlined,
+              color: Colors.blueAccent,
             ),
+            text: "使用dfs运行",
           ),
           Divider(),
-          InkWell(
-            onTap: () {
+          IconLabelButton(
+            onPress: () {
               _runAstar();
             },
-            child: Container(
-              height: 50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.looks_two_outlined,
-                    color: Colors.blueAccent,
-                  ),
-                  Text("使用A*运行")
-                ],
-              ),
+            icon: Icon(
+              Icons.looks_two_outlined,
+              color: Colors.blueAccent,
             ),
+            text: "使用A*运行",
           ),
           Divider(),
-          InkWell(
-            onTap: () {
+          IconLabelButton(
+            onPress: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return resultList(
+                    paths: pathData,
+                    returnSelectPath: _dealSelectPath,
+                  );
+                },
+              );
+            },
+            icon: Icon(
+              Icons.navigate_next,
+              color: Colors.blueAccent,
+            ),
+            text: "查看运行结果",
+          ),
+          Divider(),
+          IconLabelButton(
+            onPress: () {
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -400,67 +393,22 @@ class _SidebarState extends State<Sidebar> {
                     );
                   });
             },
-            child: Container(
-              height: 50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.navigate_next,
-                    color: Colors.blueAccent,
-                  ),
-                  Text("查看运行结果")
-                ],
-              ),
+            icon: Icon(
+              Icons.navigate_next,
+              color: Colors.blueAccent,
             ),
+            text: "查看astar运行结果",
           ),
           Divider(),
-          InkWell(
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return resultList(
-                      paths: pathData,
-                      returnSelectPath: _dealSelectPath,
-                    );
-                  });
-            },
-            child: Container(
-              height: 50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.navigate_next,
-                    color: Colors.blueAccent,
-                  ),
-                  Text("查看astar运行结果")
-                ],
-              ),
-            ),
-          ),
-          Divider(),
-          InkWell(
-            onTap: () {
+          IconLabelButton(
+            onPress: () {
               _generate();
             },
-            child: Container(
-              height: 50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.cached,
-                    color: Colors.blueAccent,
-                  ),
-                  Text("随机生成")
-                ],
-              ),
+            icon: Icon(
+              Icons.cached,
+              color: Colors.blueAccent,
             ),
+            text: "随机生成",
           ),
         ],
       ),

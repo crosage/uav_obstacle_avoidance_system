@@ -4,3 +4,6 @@ String mazeSavePath="D:\\flutters\\spfa\\lib\\maze.json";
 String resultSavePath="D:\\flutters\\spfa\\lib\\result.json";
 String astarResultSavePath="D:\\flutters\\spfa\\lib\\astar_result.json";
 String generatePath="D:\\flutters\\spfa\\lib\\algorithm\\generate.exe";
+String dstarResultSavePath="D:\\flutters\\spfa\\lib\\algorithm\\";
+String dstarRunPath="D:\\flutters\\spfa\\lib\\algorithm\\";
+String rrtstarRunPath="D:\\flutters\\spfa\\lib\\algorithm\\rrtstar.exe";

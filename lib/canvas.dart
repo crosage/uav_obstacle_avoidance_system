@@ -33,7 +33,6 @@ class _CanvasState extends State<Canvas> {
       return -1;
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,7 +45,9 @@ class _CanvasState extends State<Canvas> {
         itemBuilder: (BuildContext context, int index) {
           final int row = index ~/ widget.m;
           final int col = index % widget.m;
-          return Block(x: row, y: col, blockState: get_block_state(row, col));
+          return Block(x: row, y: col, blockState: get_block_state(row, col),onBlockChange: (){
+
+          },);
         },
         shrinkWrap: true,
       ),
