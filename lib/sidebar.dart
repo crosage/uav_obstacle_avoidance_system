@@ -49,21 +49,24 @@ class _SidebarState extends State<Sidebar> {
   int startX = 1, startY = 1, endX = 1, endY = 1;
 
   Future<String> runSystemCommand(
-      String command, List<dynamic> arguments) async {
+      String command, List<String> arguments) async {
     // print(command);
-    final process = await Process.run(command, []);
+    print("**********");
+    print(command);
+    print(arguments);
+    print("**********");
+    final process = await Process.run(command, arguments);
     // print(process);
     final output = await process.stdout;
     final error = await process.stderr;
-    // print(output);
-    // print(error);
+    print(output);
+    print(error);
     return output;
   }
 
   Future<void> _runDfs() async {
     final path = mazeRunPath;
     print(path);
-    await Process.run(path, []);
     final result = await runSystemCommand(path, []);
     final resultPath = resultSavePath;
     print("begin\n");
@@ -102,7 +105,6 @@ class _SidebarState extends State<Sidebar> {
     try {
       final path = generatePath;
       print(path);
-      await Process.run(path, []);
       final result = await runSystemCommand(path, []);
       ElegantNotification.success(
         width: 70,
@@ -192,7 +194,6 @@ class _SidebarState extends State<Sidebar> {
 
   Future<void> _runAstar() async {
     final path = astarRunPath;
-    await Process.run(path, []);
     final result = await runSystemCommand(path, []);
     final resultPath = astarResultSavePath;
     try {
@@ -206,9 +207,41 @@ class _SidebarState extends State<Sidebar> {
         pathData = convertDynamicList(l);
         ElegantNotification.info(
           width: 70,
-          // background: Colors.grey[200]!,
           title: Text("info"),
           description: Text("astar运行结束"),
+          animation: AnimationType.fromRight,
+          notificationPosition: NotificationPosition.bottomRight,
+        ).show(context);
+      }
+    } catch (e) {
+      ElegantNotification.error(
+        width: 70,
+        title: Text("info"),
+        description: Text("发生错误:\n$e"),
+        animation: AnimationType.fromRight,
+        notificationPosition: NotificationPosition.bottomRight,
+      ).show(context);
+      print(e);
+    }
+  }
+  Future<void> _runRrt() async {
+    final path = rrtstarRunPath;
+    final result = await runSystemCommand(path, []);
+    final resultPath = rrtstarSavePath;
+    try {
+      final file = File(resultPath!);
+      if (await file.exists()) {
+        String content = await file.readAsString();
+        Map<String, dynamic> jsonData = json.decode(content);
+        pathData.clear();
+        List<dynamic> l = [];
+        l.add(jsonData["path"]);
+        pathData = convertDynamicList(l);
+        ElegantNotification.info(
+          width: 70,
+          // background: Colors.grey[200]!,
+          title: Text("info"),
+          description: Text("rrtstar运行结束"),
           animation: AnimationType.fromRight,
           notificationPosition: NotificationPosition.bottomRight,
         ).show(context);
@@ -226,12 +259,41 @@ class _SidebarState extends State<Sidebar> {
     }
   }
 
-  // final file=File("./maze.json");
-
+  Future<void> _runDstar() async {
+    final path = dstarRunPath;
+    final result = await runSystemCommand("python", ["${path}"]);
+    final resultPath = dstarResultSavePath;
+    try {
+      final file = File(resultPath!);
+      if (await file.exists()) {
+        String content = await file.readAsString();
+        Map<String, dynamic> jsonData = json.decode(content);
+        pathData.clear();
+        List<dynamic> l = [];
+        l.add(jsonData["path"]);
+        pathData = convertDynamicList(l);
+        ElegantNotification.info(
+          width: 70,
+          // background: Colors.grey[200]!,
+          title: Text("info"),
+          description: Text("D*运行结束"),
+          animation: AnimationType.fromRight,
+          notificationPosition: NotificationPosition.bottomRight,
+        ).show(context);
+      }
+    } catch (e) {
+      ElegantNotification.error(
+        width: 70,
+        // background: Colors.grey[200]!,
+        title: Text("info"),
+        description: Text("发生错误:\n$e"),
+        animation: AnimationType.fromRight,
+        notificationPosition: NotificationPosition.bottomRight,
+      ).show(context);
+      print(e);
+    }
+  }
   void _createMaze(BuildContext context) {
-    int n = 0;
-    int m = 0;
-    List<List<int>> maze = [];
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -262,6 +324,7 @@ class _SidebarState extends State<Sidebar> {
       widget.getBlockState(blockState);
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -307,24 +370,15 @@ class _SidebarState extends State<Sidebar> {
               ),
             ),
           if (n != 1 && m != 1) Divider(),
-          InkWell(
-            onTap: () {
+          IconLabelButton(
+            onPress: () {
               _readMaze(0);
             },
-            child: Container(
-              height: 50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.file_upload_outlined,
-                    color: Colors.blueAccent,
-                  ),
-                  Text("从文件中导入数据")
-                ],
-              ),
+            icon: Icon(
+              Icons.file_upload_outlined,
+              color: Colors.blueAccent,
             ),
+            text: "从文件中导入数据",
           ),
           Divider(),
           IconLabelButton(
@@ -341,7 +395,6 @@ class _SidebarState extends State<Sidebar> {
           IconLabelButton(
             onPress: () {
               _runDfs();
-              print("############");
               String currentDirectory = Directory.current.path;
               print('当前运行路径: $currentDirectory');
             },
@@ -365,6 +418,28 @@ class _SidebarState extends State<Sidebar> {
           Divider(),
           IconLabelButton(
             onPress: () {
+              _runDstar();
+            },
+            icon: Icon(
+              Icons.looks_3_outlined,
+              color: Colors.blueAccent,
+            ),
+            text: "使用D*运行",
+          ),
+          Divider(),
+          IconLabelButton(
+            onPress: () {
+              _runRrt();
+            },
+            icon: Icon(
+              Icons.looks_4_outlined,
+              color: Colors.blueAccent,
+            ),
+            text: "使用rrt*运行",
+          ),
+          Divider(),
+          IconLabelButton(
+            onPress: () {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -380,24 +455,6 @@ class _SidebarState extends State<Sidebar> {
               color: Colors.blueAccent,
             ),
             text: "查看运行结果",
-          ),
-          Divider(),
-          IconLabelButton(
-            onPress: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return resultList(
-                      paths: pathData,
-                      returnSelectPath: _dealSelectPath,
-                    );
-                  });
-            },
-            icon: Icon(
-              Icons.navigate_next,
-              color: Colors.blueAccent,
-            ),
-            text: "查看astar运行结果",
           ),
           Divider(),
           IconLabelButton(

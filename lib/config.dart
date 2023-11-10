@@ -1,9 +1,10 @@
 String mazeRunPath="D:\\flutters\\spfa\\lib\\algorithm\\dfs.exe";
 String astarRunPath="D:\\flutters\\spfa\\lib\\algorithm\\astar.exe";
+String astarResultSavePath="D:\\flutters\\spfa\\lib\\astar_result.json";
 String mazeSavePath="D:\\flutters\\spfa\\lib\\maze.json";
 String resultSavePath="D:\\flutters\\spfa\\lib\\result.json";
-String astarResultSavePath="D:\\flutters\\spfa\\lib\\astar_result.json";
 String generatePath="D:\\flutters\\spfa\\lib\\algorithm\\generate.exe";
-String dstarResultSavePath="D:\\flutters\\spfa\\lib\\algorithm\\";
-String dstarRunPath="D:\\flutters\\spfa\\lib\\algorithm\\";
+String dstarResultSavePath="D:\\flutters\\spfa\\lib\\dstar_result.json";
+String dstarRunPath="D:\\flutters\\spfa\\lib\\algorithm\\Dstar_lite\\main.py";
 String rrtstarRunPath="D:\\flutters\\spfa\\lib\\algorithm\\rrtstar.exe";
+String rrtstarSavePath="D:\\flutters\\spfa\\lib\\rrt_result.json";

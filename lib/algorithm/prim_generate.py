@@ -136,6 +136,7 @@ json_file_path = "maze_data.json"
 data={
     "start":[0,0],
     "maze":maze_matrix.tolist(),
+    "end":[2*num_rows+1,2*num_cols+1]
 }
 print(data)
 # Write maze_list to the JSON file
