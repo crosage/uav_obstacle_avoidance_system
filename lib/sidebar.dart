@@ -35,8 +35,9 @@ List<List<List<int>>> convertDynamicList(List<dynamic> dynamicList) {
 class Sidebar extends StatefulWidget {
   final Function(int, int, List<List<int>>) onCanvasChange;
   final Function(List<List<int>>) getBlockState;
+  final Function() choose3d;
 
-  Sidebar(this.onCanvasChange, this.getBlockState);
+  Sidebar(this.onCanvasChange, this.getBlockState,this.choose3d);
 
   @override
   _SidebarState createState() => _SidebarState();
@@ -49,6 +50,7 @@ class _SidebarState extends State<Sidebar> {
   List<List<List<int>>> pathData = [];
   int n = 1, m = 1;
   int startX = 1, startY = 1, endX = 1, endY = 1;
+  int choose_3d=0;
 
   Future<String> runSystemCommand(
       String command, List<String> arguments) async {
@@ -275,6 +277,39 @@ class _SidebarState extends State<Sidebar> {
       print(e);
     }
   }
+
+  Future<void> _runAstar3d() async {
+    final path = astar3dRunPath;
+    final result = await runSystemCommand(path, []);
+    final resultPath = astar3dResultSavePath;
+    try {
+      final file = File(resultPath!);
+      if (await file.exists()) {
+        String content = await file.readAsString();
+        Map<String, dynamic> jsonData = json.decode(content);
+        pathData.clear();
+        List<dynamic> l = [];
+        l.add(jsonData["path"]);
+        pathData = convertDynamicList(l);
+        ElegantNotification.info(
+          width: 70,
+          title: Text("info"),
+          description: Text("astar3d运行结束"),
+          animation: AnimationType.fromRight,
+          notificationPosition: NotificationPosition.bottomRight,
+        ).show(context);
+      }
+    } catch (e) {
+      ElegantNotification.error(
+        width: 70,
+        title: Text("info"),
+        description: Text("发生错误:\n$e"),
+        animation: AnimationType.fromRight,
+        notificationPosition: NotificationPosition.bottomRight,
+      ).show(context);
+      print(e);
+    }
+  }
   Future<void> _runRrt() async {
     final path = rrtstarRunPath;
     final result = await runSystemCommand(path, []);
@@ -375,7 +410,23 @@ class _SidebarState extends State<Sidebar> {
       widget.getBlockState(blockState);
     });
   }
+  void _dealA_SelectPath(List<List<int>> path) {
+    setState(() {
+      for (int i = 0; i < blockState.length; i++) {
+        for (int j = 0; j < blockState[i].length; j++) {
+          blockState[i][j] = 0;
+        }
+      }
 
+      for (int i = 0; i < path.length; i++) {
+        List<int> item = path[i];
+        blockState[item[0]][item[1]] = i + 1;
+      }
+
+      print(blockState);
+      widget.getBlockState(blockState);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -492,12 +543,8 @@ class _SidebarState extends State<Sidebar> {
           Divider(),
           IconLabelButton(
             onPress: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CanvasWithHeight(n: n, m: m, maze: maze, blockStates: blockState);
-                },
-              );
+              widget.choose3d();
+              choose_3d=1-choose_3d;
             },
             icon: Icon(
               Icons.looks_5_outlined,
@@ -505,6 +552,29 @@ class _SidebarState extends State<Sidebar> {
             ),
             text: "包含高度情况的拓展A*",
           ),
+          if(choose_3d==1)
+            IconLabelButton(
+              onPress: () {
+                _runAstar3d();
+
+              },
+              icon: Icon(
+                Icons.assistant_photo_rounded,
+                color: Colors.blueAccent,
+              ),
+              text: "运行A*",
+            ),
+          if(choose_3d==1)
+            IconLabelButton(
+              onPress: () {
+                _dealA_SelectPath(pathData[0]);
+              },
+              icon: Icon(
+                Icons.assistant_photo_rounded,
+                color: Colors.blueAccent,
+              ),
+              text: "显示A*路径",
+            ),
           Divider(),
           IconLabelButton(
             onPress: () {

@@ -20,15 +20,19 @@ class _BlockState extends State<BlockWithHeight> {
 
 
   Color getBlockColor() {
+    print("x=${widget.x} y=${widget.y} h=${widget.height} ${widget.blockState}");
     if(widget.height==-2){
       return Colors.greenAccent;
     }
     if(widget.height==-3){
       return Colors.yellowAccent;
     }
+    if(widget.blockState>0){
+      return Colors.white;
+    }
     Color baseColor=Colors.black;
     double opacity = (widget.height / 100.0).clamp(0.0, 1.0);
-    print("x=${widget.x} y=${widget.y} h=${widget.height}");
+    // print("x=${widget.x} y=${widget.y} h=${widget.height} ");
     Color adjustedColor=baseColor.withOpacity(opacity);
     return adjustedColor;
   }

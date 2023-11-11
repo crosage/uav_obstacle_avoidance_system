@@ -20,8 +20,8 @@ def set_start_end(matrix):
     end_row, end_col = np.random.randint(0, rows), np.random.randint(0, cols)
 
     # 设置起点和终点高度，确保不低于地面高度
-    start_height = max(np.random.randint(0, 20), matrix[start_row, start_col])
-    end_height = max(np.random.randint(0, 20), matrix[end_row, end_col])
+    start_height = max(np.random.randint(0, 20), matrix[start_row, start_col]+1)
+    end_height = max(np.random.randint(0, 20), matrix[end_row, end_col]+1)
 
     return matrix, (start_row, start_col, start_height), (end_row, end_col, end_height)
 

@@ -4,8 +4,11 @@
 #include <vector>
 #include <queue>
 #include <map>
+#include <set>
 #include <algorithm>
 #include <fstream>
+#include "./include/nlohmann/json.hpp"
+using json=nlohmann::json;
 
 template<std::integral T>
 class Point {
@@ -135,14 +138,29 @@ std::vector<Point<T>> AStar(const Graph<T>& graph, const Point<T>& start, const 
 	return ans;
 }
 
+struct pt{
+	int x, y;
+		constexpr auto operator<=>(const pt& o) const = default;
+	constexpr bool operator==(const pt& o) const = default;
+};
+
 int main() {
-	std::vector<std::vector<int>> v {{10, 12, 15, 16, 20, 22, 23, 22, 17, 15, 11, 10, 7, 7, 8, 9, 8, 9, 10, 12},{10, 12, 15, 15, 15, 15, 16, 17, 14, 13, 10, 12, 10, 10, 7, 10, 11, 12, 14, 15},{8, 11, 13, 13, 13, 14, 13, 12, 11, 12, 12, 15, 16, 15, 11, 11, 12, 14, 16, 18},{8, 11, 12, 11, 11, 12, 11, 12, 15, 16, 14, 15, 17, 14, 10, 8, 13, 15, 18, 19},{10, 14, 16, 13, 13, 14, 14, 13, 16, 14, 15, 13, 17, 12, 10, 8, 10, 11, 14, 18},{12, 14, 15, 14, 14, 16, 17, 17, 19, 15, 14, 13, 15, 12, 9, 11, 14, 12, 15, 17},{18, 17, 17, 16, 16, 15, 16, 16, 18, 16, 14, 13, 12, 11, 11, 11, 13, 12, 14, 15},{17, 13, 12, 12, 16, 16, 17, 18, 19, 17, 15, 17, 17, 16, 16, 12, 16, 16, 19, 16},{15, 12, 12, 12, 15, 14, 14, 14, 16, 17, 18, 17, 17, 14, 14, 11, 17, 20, 21, 17},{12, 12, 12, 11, 14, 14, 15, 13, 13, 14, 19, 18, 19, 12, 14, 11, 18, 20, 21, 16},{12, 14, 16, 16, 17, 16, 16, 11, 14, 16, 19, 16, 16, 11, 14, 11, 18, 18, 17, 12},{12, 16, 16, 13, 12, 13, 16, 14, 14, 13, 15, 13, 16, 14, 17, 12, 15, 13, 16, 12},{14, 17, 18, 16, 12, 13, 16, 15, 14, 12, 12, 12, 14, 16, 16, 12, 12, 11, 13, 12},{17, 18, 15, 14, 8, 11, 14, 17, 15, 13, 14, 15, 17, 18, 17, 12, 11, 9, 13, 15},{20, 19, 14, 15, 11, 13, 13, 13, 13, 14, 14, 14, 13, 15, 14, 10, 8, 7, 9, 10},{20, 19, 12, 12, 8, 10, 11, 13, 15, 14, 13, 13, 14, 16, 15, 11, 11, 9, 13, 13},
-		{19, 18, 13, 10, 9, 10, 11, 7, 8, 9, 11, 10, 11, 13, 12, 9, 9, 9, 11, 10},{20, 19, 17, 13, 11, 11, 14, 13, 12, 10, 9, 10, 14, 15, 17, 15, 15, 12, 12, 11},{20, 18, 16, 13, 15, 13, 13, 12, 10, 13, 11, 13, 15, 13, 16, 14, 14, 12, 11, 13},{20, 18, 16, 14, 15, 14, 14, 15, 15, 18, 12, 14, 16, 15, 16, 16, 18, 17, 16, 18}} ;
+    std::ifstream input_file("D:\\flutters\\spfa\\lib\\algorithm\\test.json");
+    if(!input_file.is_open()){
+        std::cerr<<"Fail to open input.json"<<std::endl;
+        return 1;
+    }
+    puts("**************");
+    json input_json;
+    input_file>>input_json;
+	std::vector<std::vector<int>> v(input_json["maze"]);
 	std::vector<std::vector<std::vector<int>>> vs{};
+	puts("**************");
 	vs.resize(v.size());
 	for (int i = 0; i < v.size(); ++i) {
 		vs[i].resize(v[i].size());
 	}
+
 	for (auto& i : vs) {
 		for (auto& j : i) {
 			j.resize(30);
@@ -154,6 +172,28 @@ int main() {
 		}
 	}
 	Graph g{vs};
-	auto ans = AStar(g, { 3, 8 ,19 }, { 10, 19 ,13 });
+			puts("**");
+	auto ans = AStar(g, { int(input_json["start"][0]), int(input_json["start"][1]), int(input_json["start_height"]) },
+						{ int(input_json["end"][0]), int(input_json["end"][1]), int(input_json["end_height"])});
+		puts("**");
+	json points;
+		puts("**");
+	std::set<pt> s;
+	for(const auto&i:ans){
+		s.insert({i.getX(),i.getY()});
+	}
+	for(const auto&i:s){
+	    puts("haha");
+		points.push_back(std::vector{i.x,i.y});
+		std::cout << points << '\n';
+	}
+
+	json result;
+	result["path"]=points;
+	std::ofstream result_file("D:\\flutters\\spfa\\lib\\astar_3d_result.json");
+	if(result_file.is_open()){
+		result_file<<result;
+		result_file.close();
+	}
 
 }
