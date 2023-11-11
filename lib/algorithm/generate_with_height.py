@@ -61,7 +61,7 @@ print(my_matrix.tolist())
 print(start_point[2])
 print(end_point[2])
 print(convert_to3d(my_matrix))
-with open("test.json","w") as f:
+with open("D:\\flutters\\spfa\\lib\\algorithm\\test.json","w") as f:
     json.dump(data,f)
 # 打印生成的矩阵和起点终点信息
 print("Generated Matrix:")
