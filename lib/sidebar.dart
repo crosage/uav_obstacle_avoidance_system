@@ -1,10 +1,12 @@
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
+import 'package:spfa/components/canvas_with_height.dart';
 import 'package:spfa/components/elevated_button.dart';
 import 'package:spfa/create_maze.dart';
 import 'package:spfa/result_list.dart';
 import 'components/block.dart';
+import 'dart:math';
 import 'dart:io';
 import "config.dart";
 import 'dart:convert';
@@ -62,6 +64,28 @@ class _SidebarState extends State<Sidebar> {
     print(output);
     print(error);
     return output;
+  }
+  List<List<int>> generateRandomMatrix(int rows, int columns) {
+    final Random random = Random();
+    List<List<int>> matrix = List.generate(rows, (i) => List.generate(columns, (j) => random.nextInt(100)));
+    return matrix;
+  }
+  void saveMatrixToFile(List<List<int>> matrix, String filePath) {
+    File file = File(filePath);
+    IOSink sink = file.openWrite();
+    try {
+      for (List<int> row in matrix) {
+        String rowString = row.join(' ');
+        sink.writeln(rowString);
+      }
+    } finally {
+      sink.close();
+    }
+    print('Matrix has been saved to $filePath');
+  }
+  void generateMazeWithHeight(){
+    int maxRows=30,maxCols=30;
+    List<List<int>> matrix = generateRandomMatrix(maxRows, maxCols);
   }
 
   Future<void> _runDfs() async {
@@ -126,6 +150,32 @@ class _SidebarState extends State<Sidebar> {
     }
   }
 
+  Future<void> _generateWithHeight() async {
+    // final resultPath = resultSavePath;
+    try {
+      final path = generateWithHeightPath;
+      print(path);
+      final result = await runSystemCommand("python", [path]);
+      ElegantNotification.success(
+        width: 70,
+        // background: Colors.grey[200]!,
+        title: Text("info"),
+        description: Text("随机生成完成"),
+        animation: AnimationType.fromRight,
+        notificationPosition: NotificationPosition.bottomRight,
+      ).show(context);
+    } catch (e) {
+      ElegantNotification.error(
+        width: 70,
+        // background: Colors.grey[200]!,
+        title: Text("info"),
+        description: Text("发生错误:\n$e"),
+        animation: AnimationType.fromRight,
+        notificationPosition: NotificationPosition.bottomRight,
+      ).show(context);
+    }
+  }
+
   Future<void> _readMaze(int useDefault) async {
     try {
       String filePath = "";
@@ -141,6 +191,7 @@ class _SidebarState extends State<Sidebar> {
         filePath = mazeSavePath;
       }
       final file = File(filePath!);
+      // print("****************");
       if (await file.exists()) {
         String content = await file.readAsString();
         Map<String, dynamic> jsonData = json.decode(content);
@@ -328,7 +379,8 @@ class _SidebarState extends State<Sidebar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SingleChildScrollView(
+        child:Container(
       width: 250,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -443,6 +495,22 @@ class _SidebarState extends State<Sidebar> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
+                  return CanvasWithHeight(n: n, m: m, maze: maze, blockStates: blockState);
+                },
+              );
+            },
+            icon: Icon(
+              Icons.looks_5_outlined,
+              color: Colors.blueAccent,
+            ),
+            text: "包含高度情况的拓展A*",
+          ),
+          Divider(),
+          IconLabelButton(
+            onPress: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
                   return resultList(
                     paths: pathData,
                     returnSelectPath: _dealSelectPath,
@@ -465,10 +533,22 @@ class _SidebarState extends State<Sidebar> {
               Icons.cached,
               color: Colors.blueAccent,
             ),
-            text: "随机生成",
+            text: "随机生成01矩阵",
+          ),
+          Divider(),
+          IconLabelButton(
+            onPress: () {
+              _generateWithHeight();
+            },
+            icon: Icon(
+              Icons.cached,
+              color: Colors.blueAccent,
+            ),
+            text: "随机生成带高度矩阵",
           ),
         ],
       ),
-    );
+    ),)
+    ;
   }
 }

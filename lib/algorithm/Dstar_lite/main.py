@@ -1,10 +1,10 @@
 from d_star import DStar
 import json
 
-with open('D:\\flutters\\spfa\\lib\\maze.json', 'r') as input:
+with open('D:\\flutters\\spfa\\lib\\algorithm\\Dstar_lite\\maze.json', 'r') as input:
     map = json.load(input)
-m = map.get('m')
-n = map.get('n')
+m = map.get('n')
+n = map.get('m')
 start = map.get('start')  # 获取起始点的坐标
 end = map.get('end')  # 获取终点的坐标
 obstacle = []  # 记录障碍物的坐标

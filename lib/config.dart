@@ -8,3 +8,4 @@ String dstarResultSavePath="D:\\flutters\\spfa\\lib\\dstar_result.json";
 String dstarRunPath="D:\\flutters\\spfa\\lib\\algorithm\\Dstar_lite\\main.py";
 String rrtstarRunPath="D:\\flutters\\spfa\\lib\\algorithm\\rrtstar.exe";
 String rrtstarSavePath="D:\\flutters\\spfa\\lib\\rrt_result.json";
+String generateWithHeightPath="D:\\flutters\\spfa\\lib\\algorithm\\generate_with_height.py";
