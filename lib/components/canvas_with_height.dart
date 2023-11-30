@@ -7,11 +7,13 @@ class CanvasWithHeight extends StatefulWidget {
   final int m;
   final List<List<int>> maze;
   final List<List<int>> blockStates;
+  // final int startX,startY,endX,endY;
   CanvasWithHeight({
     required this.n,
     required this.m,
     required this.maze,
     required this.blockStates,
+    // required
   });
 
   @override
@@ -27,7 +29,7 @@ class _CanvasState extends State<CanvasWithHeight> {
     } else if (widget.maze[x][y] == -3) {
       return -3;
     } else {
-      return widget.blockStates[x][y];;
+      return widget.blockStates[x][y];
     }
   }
 

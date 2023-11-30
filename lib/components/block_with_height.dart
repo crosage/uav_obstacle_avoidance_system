@@ -31,7 +31,7 @@ class _BlockState extends State<BlockWithHeight> {
       return Colors.white;
     }
     Color baseColor=Colors.black;
-    double opacity = (widget.height / 100.0).clamp(0.0, 1.0);
+    double opacity = (widget.height / 50.0).clamp(0.0, 1.0);
     // print("x=${widget.x} y=${widget.y} h=${widget.height} ");
     Color adjustedColor=baseColor.withOpacity(opacity);
     return adjustedColor;

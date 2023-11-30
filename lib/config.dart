@@ -11,3 +11,7 @@ String rrtstarRunPath="D:\\flutters\\spfa\\lib\\algorithm\\rrtstar.exe";
 String rrtstarSavePath="D:\\flutters\\spfa\\lib\\rrt_result.json";
 String generateWithHeightPath="D:\\flutters\\spfa\\lib\\algorithm\\generate_with_height.py";
 String astar3dRunPath="D:\\flutters\\spfa\\lib\\algorithm\\astar_3d.exe";
+String lidRunPath="D:\\flutters\\spfa\\lib\\algorithm\\astar_gran.exe";
+String lidSaveRunPath="D:\\flutters\\spfa\\lib\\astar_gran_result.json";
+String gcsRunPath="D:\\flutters\\spfa\\lib\\algorithm\\mavlink_gcs.exe";
+String uavRunPath="D:\\flutters\\spfa\\lib\\algorithm\\mavlink_uav.exe";

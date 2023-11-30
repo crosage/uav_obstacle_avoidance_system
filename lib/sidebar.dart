@@ -345,6 +345,40 @@ class _SidebarState extends State<Sidebar> {
     }
   }
 
+  Future<void> _runGran() async {
+    // final path = lidRunPath;
+    // final result = await runSystemCommand(path, []);
+    final resultPath = lidSaveRunPath;
+    try {
+      final file = File(resultPath!);
+      if (await file.exists()) {
+        String content = await file.readAsString();
+        Map<String, dynamic> jsonData = json.decode(content);
+        pathData.clear();
+        List<dynamic> l = [];
+        l.add(jsonData["path"]);
+        pathData = convertDynamicList(l);
+        ElegantNotification.info(
+          width: 70,
+          // background: Colors.grey[200]!,
+          title: Text("info"),
+          description: Text("粒度运行结束"),
+          animation: AnimationType.fromRight,
+          notificationPosition: NotificationPosition.bottomRight,
+        ).show(context);
+      }
+    } catch (e) {
+      ElegantNotification.error(
+        width: 70,
+        // background: Colors.grey[200]!,
+        title: Text("info"),
+        description: Text("发生错误:\n$e"),
+        animation: AnimationType.fromRight,
+        notificationPosition: NotificationPosition.bottomRight,
+      ).show(context);
+      print(e);
+    }
+  }
   Future<void> _runDstar() async {
     final path = dstarRunPath;
     final result = await runSystemCommand("python", ["${path}"]);
@@ -543,11 +577,24 @@ class _SidebarState extends State<Sidebar> {
           Divider(),
           IconLabelButton(
             onPress: () {
+              _runGran();
+              // widget.choose3d();
+              // choose_3d=1-choose_3d;
+            },
+            icon: Icon(
+              Icons.looks_5_outlined,
+              color: Colors.blueAccent,
+            ),
+            text: "粒度拓展下的无人机",
+          ),
+          Divider(),
+          IconLabelButton(
+            onPress: () {
               widget.choose3d();
               choose_3d=1-choose_3d;
             },
             icon: Icon(
-              Icons.looks_5_outlined,
+              Icons.looks_6_outlined,
               color: Colors.blueAccent,
             ),
             text: "包含高度情况的拓展A*",
@@ -615,6 +662,28 @@ class _SidebarState extends State<Sidebar> {
               color: Colors.blueAccent,
             ),
             text: "随机生成带高度矩阵",
+          ),
+          Divider(),
+          IconLabelButton(
+            onPress: () {
+              runSystemCommand(gcsRunPath, []);
+            },
+            icon: Icon(
+              Icons.location_on,
+              color: Colors.blueAccent,
+            ),
+            text: "gcs加密通信",
+          ),
+          Divider(),
+          IconLabelButton(
+            onPress: () {
+              runSystemCommand(uavRunPath, []);
+            },
+            icon: Icon(
+              Icons.airplanemode_active,
+              color: Colors.blueAccent,
+            ),
+            text: "uav加密通信",
           ),
         ],
       ),

@@ -166,16 +166,19 @@ int main() {
 			j.resize(30);
 		}
 	}
-	for (int i = 0; i < v.size(); ++i) {
-		for (int j = 0; j < v[i].size(); ++j) {
-			vs[i][j][v[i][j]] = 1;
+for (int i = 0; i < v.size(); ++i) {
+	for (int j = 0; j < v[i].size(); ++j) {
+		for (int k = 0; k <= v[i][j]; ++k) {
+			vs[i][j][k] = 1;
 		}
 	}
+}
 	Graph g{vs};
 			puts("**");
 	auto ans = AStar(g, { int(input_json["start"][0]), int(input_json["start"][1]), int(input_json["start_height"]) },
 						{ int(input_json["end"][0]), int(input_json["end"][1]), int(input_json["end_height"])});
 		puts("**");
+	printf("vectorlength=%d\n",ans.size());
 	json points;
 		puts("**");
 	std::set<pt> s;

@@ -17,6 +17,7 @@ class _MyAppState extends State<MyApp> {
   List<List<int>> blockState=[];
   List<List<List<int>>> paths=[[[0]]];
   int _3d=0;
+  int startX=0,startY=0,endX=0,endY=0;
   void _handle_n_m(int x,int y,List<List<int>> maze_data){
     setState(() {
       row=x;
@@ -34,7 +35,12 @@ class _MyAppState extends State<MyApp> {
       _3d=1-_3d;
       print("**********");
     });
-
+  }
+  void update_start_end(int startx,int starty,int endx,int endy){
+    startX=startx;
+    startY=starty;
+    endX=endx;
+    endY=endy;
   }
   @override
   Widget build(BuildContext context) {
